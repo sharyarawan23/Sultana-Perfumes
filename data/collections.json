@@ -1,0 +1,43 @@
+{
+  "Women": [
+    "ayla",
+    "vanilla-elixir",
+    "ajwan",
+    "amicare"
+  ],
+  "Men": [
+    "oud-rose",
+    "portofino",
+    "patchouli",
+    "lenden",
+    "casa-blanca",
+    "sigma"
+  ],
+  "Luxury Home Spray": [
+    "black-london",
+    "sweet-rose",
+    "velvet-night",
+    "machmoun",
+    "cotton-candy"
+  ],
+  "Unisex": [],
+  "Oud, Bakhoor & Loban": [
+    "oud-amber",
+    "oud-oudy",
+    "oud-private",
+    "maamoul-doha",
+    "bakhour-hala-ghala",
+    "bakhour-al-sheikha",
+    "luban-with-oud",
+    "bakhoor-burner"
+  ],
+  "Gift Sets": [
+    "discovery-set",
+    "oud-collection-set"
+  ],
+  "Signature Collection": [
+    "sultana-oud",
+    "royal-bukhoor",
+    "amber-night"
+  ]
+}
