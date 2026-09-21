@@ -8,7 +8,6 @@ const useCards = [
   { title: "HOME", subtitle: "A fresher, warmer space.", image: "/assets/use-home.png" },
   { title: "CAR", subtitle: "A luxurious drive.", image: "/assets/use-car.png" },
   { title: "CLOTHES & LINEN", subtitle: "Lasting freshness.", image: "/assets/use-clothes.png" },
-  { title: "ROOM & SPA", subtitle: "A relaxing atmosphere.", image: "/assets/use-living.png" },
 ];
 
 const sprayImageOverrides: Record<string, string> = {
@@ -52,38 +51,30 @@ export default function RoomSprays() {
         </picture>
       </section>
 
-      <section className="px-5 md:px-12 lg:px-20 py-14 md:py-20">
+      <section className="w-full px-5 md:px-8 lg:px-10 xl:px-12 py-14 md:py-20">
         <div className="flex items-end justify-between gap-6 mb-8">
-          <div>
-            <h1 className="font-serif text-4xl md:text-5xl">One Mist. Many Moments.</h1>
-          </div>
+          <h1 className="font-serif text-4xl md:text-5xl">One Mist. Many Moments.</h1>
           <Link to="/shop?collection=spray" className="hidden sm:flex items-center gap-6 text-sm">
             <span>View all</span><span className="text-2xl">↗</span>
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
           {useCards.map((card) => (
-            <Link key={card.title} to={`/room-sprays?use=${encodeURIComponent(card.title.toLowerCase())}`} className="group relative aspect-[4/3] overflow-hidden bg-[#2a2119]">
-              <img src={card.image} alt={card.title} className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-4 md:p-5 text-white">
-                <h2 className="font-serif text-2xl md:text-3xl leading-tight">{card.title}</h2>
-                <p className="mt-2 text-xs md:text-sm text-white/90">{card.subtitle}</p>
-                <div className="mt-2 flex items-center justify-between text-xs tracking-wide"><span>SHOP NOW</span><span className="text-xl">↗</span></div>
+            <Link key={card.title} to={`/room-sprays?use=${encodeURIComponent(card.title.toLowerCase())}`} className="group block w-full overflow-hidden bg-[#2a2119]">
+              <div className="relative w-full aspect-[307/204] overflow-hidden">
+                <img src={card.image} alt={card.title} className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
               </div>
             </Link>
           ))}
         </div>
       </section>
 
-      <section className="px-5 md:px-12 lg:px-20 pb-16 md:pb-24">
+      <section className="w-full px-5 md:px-8 lg:px-10 xl:px-12 pb-16 md:pb-24">
         <div className="flex items-end justify-between mb-8">
-          <div>
-            <h2 className="font-serif text-4xl md:text-5xl">The Ambiance Collection</h2>
-          </div>
+          <h2 className="font-serif text-4xl md:text-5xl">The Ambiance Collection</h2>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-10 w-full">
           {filteredSprays.map((product) => <ProductCard key={product.id} product={product} />)}
         </div>
       </section>
