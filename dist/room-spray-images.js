@@ -44,7 +44,7 @@
       }
       const overlay = card.querySelector('div');
       if (overlay) overlay.style.display = 'none';
-      card.style.cssText = 'position:relative;display:block;height:auto;aspect-ratio:1.5/1;overflow:hidden;background:#1c1712;';
+      card.style.cssText = 'position:relative;display:block;width:100%;height:auto;aspect-ratio:307/204;overflow:hidden;background:#1c1712;';
       if (!card.querySelector('.spray-use-arrow')) {
         const arrow = document.createElement('span');
         arrow.className = 'spray-use-arrow';
@@ -55,7 +55,7 @@
       }
     });
     cards.slice(3).forEach((card) => card.remove());
-    section.style.cssText = 'display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;';
+    section.style.cssText = 'display:grid;grid-template-columns:repeat(3,minmax(0,307px));gap:16px;justify-content:start;align-items:start;';
   }
 
   function applyAll() {
