@@ -23,8 +23,32 @@
     });
   }
 
-  applyNewSprayImages();
-  new MutationObserver(() => applyNewSprayImages()).observe(document.documentElement, {
+  function applyShopByUse() {
+    const section = document.querySelector('.department-categories .category-section');
+    if (!section) return;
+    const cards = Array.from(section.querySelectorAll('.category-card'));
+    const images = [
+      '/assets/use-room-mist.png',
+      '/assets/use-car-mist.png',
+      '/assets/use-clothing-mist.png'
+    ];
+    cards.slice(0, 3).forEach((card, index) => {
+      const img = card.querySelector('img');
+      if (img && img.getAttribute('src') !== images[index]) {
+        img.src = images[index];
+        img.removeAttribute('srcset');
+      }
+    });
+    cards.slice(3).forEach((card) => card.remove());
+  }
+
+  function applyAll() {
+    applyNewSprayImages();
+    applyShopByUse();
+  }
+
+  applyAll();
+  new MutationObserver(applyAll).observe(document.documentElement, {
     childList: true,
     subtree: true
   });
