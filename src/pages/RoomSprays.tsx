@@ -55,7 +55,6 @@ export default function RoomSprays() {
       <section className="px-5 md:px-12 lg:px-20 py-14 md:py-20">
         <div className="flex items-end justify-between gap-6 mb-8">
           <div>
-            <p className="text-[11px] tracking-[0.34em] uppercase text-[#9a6b31] mb-3">Shop by use</p>
             <h1 className="font-serif text-4xl md:text-5xl">One Mist. Many Moments.</h1>
           </div>
           <Link to="/shop?collection=spray" className="hidden sm:flex items-center gap-6 text-sm">
@@ -81,8 +80,7 @@ export default function RoomSprays() {
       <section className="px-5 md:px-12 lg:px-20 pb-16 md:pb-24">
         <div className="flex items-end justify-between mb-8">
           <div>
-            <p className="text-[11px] tracking-[0.34em] uppercase text-[#9a6b31] mb-3">Our mists collection</p>
-            <h2 className="font-serif text-4xl md:text-5xl">Signature Mists</h2>
+            <h2 className="font-serif text-4xl md:text-5xl">The Ambiance Collection</h2>
           </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-10">
