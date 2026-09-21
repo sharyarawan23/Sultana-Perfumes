@@ -1,23 +1,24 @@
 'use strict';
 (() => {
+  const base = '/assets/spray-products-final/';
   const replacements = {
-    'Black London': '/assets/black-london-new.png',
-    'Sweet Rose': '/assets/sweet-rose-new.png',
-    'Velvet Night': '/assets/velvet-night-new.png',
-    'Machmoun': '/assets/machmoun-new.png',
-    'Cotton Candy': '/assets/cotton-candy-new.png',
-    'بلاك لندن': '/assets/black-london-new.png',
-    'سويت روز': '/assets/sweet-rose-new.png',
-    'فيلفت نايت': '/assets/velvet-night-new.png',
-    'المشموم': '/assets/machmoun-new.png',
-    'كوتن كاندي': '/assets/cotton-candy-new.png'
+    'Black London': base + 'black-london-new.png',
+    'Sweet Rose': base + 'sweet-rose-new.png',
+    'Velvet Night': base + 'velvet-night-new.png',
+    'Machmoun': base + 'machmoun-new.png',
+    'Cotton Candy': base + 'cotton-candy-new.png',
+    'بلاك لندن': base + 'black-london-new.png',
+    'سويت روز': base + 'sweet-rose-new.png',
+    'فيلفت نايت': base + 'velvet-night-new.png',
+    'المشموم': base + 'machmoun-new.png',
+    'كوتن كاندي': base + 'cotton-candy-new.png'
   };
 
   const newSprays = [
-    { id: 'royal-fruity', name: 'Royal Fruity', nameAr: 'رويال فروتي', image: '/assets/royal-fruity-new.png' },
-    { id: 'wood-bouquet', name: 'Wood Bouquet', nameAr: 'وود بوكيه', image: '/assets/wood-bouquet-new.png' },
-    { id: 'my-mood', name: 'My Mood', nameAr: 'ماي مود', image: '/assets/my-mood-new.png' },
-    { id: 'blanc-imperial', name: 'Blanc Imperial', nameAr: 'بلانك إمبريال', image: '/assets/blanc-imperial-new.png' }
+    { id: 'royal-fruity', name: 'Royal Fruity', nameAr: 'رويال فروتي', image: base + 'royal-fruity-new.png' },
+    { id: 'wood-bouquet', name: 'Wood Bouquet', nameAr: 'وود بوكيه', image: base + 'wood-bouquet-new.png' },
+    { id: 'my-mood', name: 'My Mood', nameAr: 'ماي مود', image: base + 'my-mood-new.png' },
+    { id: 'blanc-imperial', name: 'Blanc Imperial', nameAr: 'بلانك إمبريال', image: base + 'blanc-imperial-new.png' }
   ];
 
   function applyNewSprayImages(root = document) {
@@ -65,40 +66,27 @@
     const cardsGrid = document.querySelector('.department-categories .category-section');
     const collectionSection = document.querySelector('#collection.shop-section');
     const productsGrid = document.querySelector('#collection #products');
-
-    if (useSection) {
-      useSection.style.maxWidth = 'none';
-      useSection.style.width = '100%';
-      useSection.style.paddingLeft = '5%';
-      useSection.style.paddingRight = '5%';
-    }
-
+    if (useSection) { useSection.style.maxWidth='none'; useSection.style.width='100%'; useSection.style.paddingLeft='5%'; useSection.style.paddingRight='5%'; }
     if (cardsGrid) {
       cardsGrid.classList.add('spray-use-cards');
       const cards = Array.from(cardsGrid.querySelectorAll('.category-card'));
       const images = ['/assets/use-room-mist.png','/assets/use-car-mist.png','/assets/use-clothing-mist.png'];
-      cards.slice(0, 3).forEach((card, index) => {
-        const img = card.querySelector('img');
-        if (img && img.getAttribute('src') !== images[index]) { img.src = images[index]; img.removeAttribute('srcset'); }
-        if (img) img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;margin:0;object-fit:cover;object-position:center;max-width:none;transform:none;mask-image:none;';
-        const overlay = card.querySelector('div');
-        if (overlay) overlay.style.display = 'none';
-        card.style.cssText = 'position:relative;display:block;width:100%;height:auto;aspect-ratio:307/204;overflow:hidden;background:#1c1712;';
-        if (!card.querySelector('.spray-use-arrow')) {
-          const arrow = document.createElement('span'); arrow.className = 'spray-use-arrow'; arrow.setAttribute('aria-hidden','true'); arrow.textContent = '↗';
-          arrow.style.cssText = 'position:absolute;right:16px;bottom:12px;z-index:3;color:#fff;font-size:22px;line-height:1;text-shadow:0 1px 6px #000;'; card.appendChild(arrow);
-        }
+      cards.slice(0,3).forEach((card,index) => {
+        const img=card.querySelector('img');
+        if(img && img.getAttribute('src')!==images[index]) { img.src=images[index]; img.removeAttribute('srcset'); }
+        if(img) img.style.cssText='position:absolute;inset:0;width:100%;height:100%;margin:0;object-fit:cover;object-position:center;max-width:none;transform:none;mask-image:none;';
+        const overlay=card.querySelector('div'); if(overlay) overlay.style.display='none';
+        card.style.cssText='position:relative;display:block;width:100%;height:auto;aspect-ratio:307/204;overflow:hidden;background:#1c1712;';
       });
-      cards.slice(3).forEach((card) => card.remove());
-      cardsGrid.style.cssText = 'display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;width:100%;justify-content:stretch;align-items:start;';
+      cards.slice(3).forEach(card=>card.remove());
+      cardsGrid.style.cssText='display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;width:100%;justify-content:stretch;align-items:start;';
     }
-
-    if (collectionSection) { collectionSection.style.maxWidth = 'none'; collectionSection.style.width = '100%'; collectionSection.style.paddingLeft = '5%'; collectionSection.style.paddingRight = '5%'; }
-    if (productsGrid) { productsGrid.style.gridTemplateColumns = window.innerWidth >= 900 ? 'repeat(3,minmax(0,1fr))' : window.innerWidth >= 600 ? 'repeat(2,minmax(0,1fr))' : '1fr'; productsGrid.style.width = '100%'; }
+    if(collectionSection){collectionSection.style.maxWidth='none';collectionSection.style.width='100%';collectionSection.style.paddingLeft='5%';collectionSection.style.paddingRight='5%';}
+    if(productsGrid){productsGrid.style.gridTemplateColumns=window.innerWidth>=900?'repeat(3,minmax(0,1fr))':window.innerWidth>=600?'repeat(2,minmax(0,1fr))':'1fr';productsGrid.style.width='100%';}
   }
 
-  function applyAll() { applyNewSprayImages(); addNewSprays(); applyRoomSprayLayout(); }
+  function applyAll(){applyNewSprayImages();addNewSprays();applyRoomSprayLayout();}
   applyAll();
-  window.addEventListener('resize', applyRoomSprayLayout);
-  new MutationObserver(applyAll).observe(document.documentElement, { childList: true, subtree: true });
+  window.addEventListener('resize',applyRoomSprayLayout);
+  new MutationObserver(applyAll).observe(document.documentElement,{childList:true,subtree:true});
 })();
