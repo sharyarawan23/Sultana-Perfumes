@@ -10,16 +10,18 @@ const useCards = [
   { title: "CLOTHES & LINEN", subtitle: "Lasting freshness.", image: "/assets/use-clothes.png" },
 ];
 
+const sprayAssetBase = "https://raw.githubusercontent.com/sharyarawan23/Sultana-Perfumes/main/dist/assets/spray-products-final";
+
 const sprayImageOverrides: Record<string, string> = {
-  "black-london": "/assets/spray-products-final/black-london-new.png",
-  "sweet-rose": "/assets/spray-products-final/sweet-rose-new.png",
-  "velvet-night": "/assets/spray-products-final/velvet-night-new.png",
-  machmoun: "/assets/spray-products-final/machmoun-new.png",
-  "cotton-candy": "/assets/spray-products-final/cotton-candy-new.png",
-  "royal-fruity": "/assets/spray-products-final/royal-fruity-new.png",
-  "wood-bouquet": "/assets/spray-products-final/wood-bouquet-new.png",
-  "my-mood": "/assets/spray-products-final/my-mood-new.png",
-  "blanc-imperial": "/assets/spray-products-final/blanc-imperial-new.png",
+  "black-london": `${sprayAssetBase}/black-london-new.png`,
+  "sweet-rose": `${sprayAssetBase}/sweet-rose-new.png`,
+  "velvet-night": `${sprayAssetBase}/velvet-night-new.png`,
+  machmoun: `${sprayAssetBase}/machmoun-new.png`,
+  "cotton-candy": `${sprayAssetBase}/cotton-candy-new.png`,
+  "royal-fruity": `${sprayAssetBase}/royal-fruity-new.png`,
+  "wood-bouquet": `${sprayAssetBase}/wood-bouquet-new.png`,
+  "my-mood": `${sprayAssetBase}/my-mood-new.png`,
+  "blanc-imperial": `${sprayAssetBase}/blanc-imperial-new.png`,
 };
 
 export default function RoomSprays() {
