@@ -13,6 +13,25 @@
     }
   }
 
+  const id=document.body.dataset.productId;
+  const sprayImages={
+    'black-london':'/assets/black-london.webp',
+    'sweet-rose':'/assets/sweet-rose.webp',
+    'velvet-night':'/assets/velvet-night.webp',
+    'machmoun':'/assets/new-products/machmoun.webp',
+    'cotton-candy':'/assets/new-products/cotton-candy.webp'
+  };
+  const sprayIds=Object.keys(sprayImages);
+  const fixSprayImage=(img,pid)=>{if(img&&sprayImages[pid]){img.src=sprayImages[pid];img.removeAttribute('srcset');}};
+  if(sprayIds.includes(id)){
+    fixSprayImage(document.querySelector('.product-gallery img'),id);
+    document.querySelectorAll('.related-products .product-card').forEach(card=>{
+      const href=card.querySelector('.product-photo-link')?.getAttribute('href')||'';
+      const pid=href.split('/').filter(Boolean).pop();
+      fixSprayImage(card.querySelector('img'),pid);
+    });
+  }
+
   const info = document.querySelector('.product-info');
   const detailType = (document.querySelector('.detail-type')?.textContent || '').toLowerCase();
   const specs = [...document.querySelectorAll('.product-specs div')];
