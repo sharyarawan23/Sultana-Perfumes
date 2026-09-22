@@ -1,6 +1,7 @@
 (() => {
   if (!document.body.dataset.productId) return;
   const ar=document.documentElement.lang==='ar',id=document.body.dataset.productId;
+  if(id!=='ayla') document.querySelector('.product-description')?.remove();
   const sprayImages={'black-london':'/assets/spray-products-final/black-london-new.png','sweet-rose':'/assets/spray-products-final/sweet-rose-new.png','velvet-night':'/assets/spray-products-final/velvet-night-new.png','machmoun':'/assets/spray-products-final/machmoun-new.png','cotton-candy':'/assets/spray-products-final/cotton-candy-new.png','royal-fruity':'/assets/spray-products-final/royal-fruity-new.png','wood-bouquet':'/assets/spray-products-final/wood-bouquet-new.png','my-mood':'/assets/spray-products-final/my-mood-new.png','blanc-imperial':'/assets/spray-products-final/blanc-imperial-new.png'};
   const fix=(img,pid)=>{if(img&&sprayImages[pid]){img.src=sprayImages[pid];img.removeAttribute('srcset');img.onerror=null;}};
   if(sprayImages[id])fix(document.querySelector('.product-gallery img'),id);
