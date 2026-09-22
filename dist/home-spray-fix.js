@@ -14,13 +14,19 @@
   };
   const apply=()=>{
     const grid=document.querySelector('#home-products');
-    if(!grid)return;
-    grid.querySelectorAll('.product-card').forEach(card=>{
-      const title=(card.querySelector('h3')?.textContent||'').trim();
-      const src=finalImages[title];
-      const img=card.querySelector('img');
-      if(src&&img&&img.getAttribute('src')!==src){img.src=src;img.removeAttribute('srcset');}
-    });
+    if(grid){
+      grid.querySelectorAll('.product-card').forEach(card=>{
+        const title=(card.querySelector('h3')?.textContent||'').trim();
+        const src=finalImages[title];
+        const img=card.querySelector('img');
+        if(src&&img&&img.getAttribute('src')!==src){img.src=src;img.removeAttribute('srcset');}
+      });
+    }
+    const bestSellerLink=document.querySelector('#best-sellers .text-link');
+    if(bestSellerLink){
+      bestSellerLink.href='/shop/?collection=perfume#collection';
+      if(/view all products/i.test(bestSellerLink.textContent)) bestSellerLink.innerHTML='Explore more <span aria-hidden="true">↗</span>';
+    }
   };
   apply();
   new MutationObserver(apply).observe(document.documentElement,{childList:true,subtree:true});
