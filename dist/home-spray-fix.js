@@ -13,6 +13,15 @@
     'المشموم':'/assets/spray-products-final/machmoun-new.png',
     'كوتن كاندي':'/assets/spray-products-final/cotton-candy-new.png'
   };
+  const style=document.createElement('style');
+  style.textContent=`@media(max-width:700px){#bakhoor-products{display:flex!important;gap:14px!important;overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x mandatory!important;-webkit-overflow-scrolling:touch!important;padding-bottom:10px!important;margin-right:-5vw!important;margin-left:-5vw!important;padding-right:5vw!important;padding-left:5vw!important;scrollbar-width:none!important}#bakhoor-products::-webkit-scrollbar{display:none!important}#bakhoor-products .product-card{flex:0 0 clamp(245px,72vw,330px)!important;scroll-snap-align:start!important;min-width:0!important}#bakhoor-products .product-card h3{font-size:24px!important}#bakhoor-products .card-add{max-width:none!important;width:100%!important}}`;
+  document.head.appendChild(style);
+  const syncPrivateCollection=()=>{
+    const grid=document.querySelector('#bakhoor-products');
+    if(!grid||typeof products==='undefined'||typeof card!=='function')return;
+    const ids=['sultana-oud','royal-bukhoor','amber-night','oud-collection-set'];
+    grid.innerHTML=ids.map(id=>products.find(p=>p.id===id)).filter(Boolean).map(card).join('');
+  };
   const apply=()=>{
     const grid=document.querySelector('#home-products');
     if(grid){
@@ -23,6 +32,7 @@
         if(src&&img&&img.getAttribute('src')!==src){img.src=src;img.removeAttribute('srcset');}
       });
     }
+    syncPrivateCollection();
     const bestSellerLink=document.querySelector('#best-sellers .text-link');
     if(bestSellerLink){
       bestSellerLink.href=perfumeUrl;
