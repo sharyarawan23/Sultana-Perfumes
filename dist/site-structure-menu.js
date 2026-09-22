@@ -35,6 +35,17 @@
 
   const params = new URLSearchParams(location.search);
   const collection = params.get('collection');
+
+  if (location.pathname === '/shop/' && collection === 'perfume') {
+    const style = document.createElement('style');
+    style.textContent = `
+      #perfume-collection-banner,#perfume-bottom-banner{position:relative;width:100%;aspect-ratio:3/1;overflow:hidden;background:#eadbc0;contain:layout paint}
+      #perfume-collection-banner .perfume-banner-link,#perfume-bottom-banner .perfume-banner-link{display:block;width:100%;height:100%;overflow:hidden}
+      #perfume-collection-banner img,#perfume-bottom-banner img{display:block!important;width:100%!important;height:100%!important;max-width:none!important;object-fit:cover!important;object-position:center!important;transform:none!important;transition:none!important;animation:none!important}
+    `;
+    document.head.appendChild(style);
+  }
+
   if (['women','men','unisex'].includes(collection)) {
     const section = document.getElementById('collection');
     if (section && !document.querySelector('.collection-back-link')) {
