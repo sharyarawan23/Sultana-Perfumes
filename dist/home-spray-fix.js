@@ -1,5 +1,6 @@
 'use strict';
 (()=>{
+  const perfumeUrl='/shop/?collection=perfume#collection';
   const finalImages={
     'Black London':'/assets/spray-products-final/black-london-new.png',
     'Sweet Rose':'/assets/spray-products-final/sweet-rose-new.png',
@@ -24,10 +25,17 @@
     }
     const bestSellerLink=document.querySelector('#best-sellers .text-link');
     if(bestSellerLink){
-      bestSellerLink.href='/shop/?collection=perfume#collection';
-      if(/view all products/i.test(bestSellerLink.textContent)) bestSellerLink.innerHTML='Explore more <span aria-hidden="true">↗</span>';
+      bestSellerLink.href=perfumeUrl;
+      if(/view all products|explore more/i.test(bestSellerLink.textContent)) bestSellerLink.innerHTML='Explore more <span aria-hidden="true">↗</span>';
     }
   };
+  document.addEventListener('click',e=>{
+    const link=e.target.closest('#best-sellers .text-link');
+    if(!link)return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    window.location.assign(perfumeUrl);
+  },true);
   apply();
   new MutationObserver(apply).observe(document.documentElement,{childList:true,subtree:true});
 })();
