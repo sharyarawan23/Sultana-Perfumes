@@ -1,0 +1,43 @@
+name: Sync Arabic site parity
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'dist/ar-site-sync.js'
+      - '.github/workflows/sync-arabic-parity.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply Arabic parity layer to every Arabic page
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          root=Path('dist/ar')
+          tag='<script src="/ar-site-sync.js" defer></script>'
+          for p in root.rglob('*.html'):
+              s=p.read_text(encoding='utf-8')
+              if tag not in s:
+                  s=s.replace('</body>',tag+'</body>')
+                  p.write_text(s,encoding='utf-8')
+          PY
+      - name: Create Arabic Coming Soon pages
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          pages={'discovery-set':'مجموعة الاكتشاف','gift':'الهدايا','wedding':'الأعراس','hospitality':'الضيافة','b2b':'الأعمال والشركات','gift-voucher':'قسيمة هدية','our-story':'قصتنا'}
+          tpl='''<!doctype html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{title} — سلطانة للعطور</title><link rel="stylesheet" href="/style.css"></head><body><div class="announcement"><span>سلطانة للعطور</span><span>عطر لكل لحظة</span><span>قطر · ر.ق</span></div><header><button class="icon-button menu-toggle" id="menu-open">☰</button><nav id="main-navigation"></nav><a class="brand" href="/ar/"><img src="/assets/brand/sultana-logo.png" alt="سلطانة للعطور"></a><div class="header-actions"><a class="language-switch" href="/">English</a></div></header><main class="section-shell" style="min-height:55vh;display:grid;place-items:center;text-align:center"><div><p class="eyebrow">سلطانة للعطور</p><h1>{title}</h1><p>قريباً</p></div></main><script src="/app.js" defer></script><script src="/ar-site-sync.js" defer></script></body></html>'''
+          for slug,title in pages.items():
+              p=Path('dist/ar')/slug/'index.html';p.parent.mkdir(parents=True,exist_ok=True)
+              if not p.exists(): p.write_text(tpl.format(title=title),encoding='utf-8')
+          PY
+      - name: Commit generated Arabic parity updates
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add dist/ar
+          git diff --cached --quiet || (git commit -m "Apply English updates across Arabic site" && git push)
