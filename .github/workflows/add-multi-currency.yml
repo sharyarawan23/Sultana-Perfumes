@@ -1,0 +1,51 @@
+name: Add multi currency selector
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/add-multi-currency.yml'
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add compact currency selector
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          root=Path('dist')
+          css=root/'style.css'
+          s=css.read_text()
+          marker='/* Compact currency + language controls */'
+          if marker not in s:
+            s += '''\n\n/* Compact currency + language controls */\n.currency-select{width:auto;max-width:92px;border:0;background:transparent;padding:5px 2px;font:500 10px/1.2 var(--sans);letter-spacing:.15px;cursor:pointer;color:var(--ink)}\n.language-switch{font-size:10px;line-height:1.2;white-space:nowrap;padding:6px 2px}\n.header-actions{gap:10px}\n@media(max-width:850px){.currency-select{max-width:76px;font-size:9px}.language-switch{font-size:9px}.header-actions{gap:3px}}\n@media(max-width:540px){.currency-select{max-width:70px;font-size:9px}.language-switch{font-size:9px;padding-inline:1px}}\n'''
+            css.write_text(s)
+          # Add selector beside language on every generated HTML page. QAR is default and Qatar flag is visible.
+          selector='<select class="currency-select" id="currency-select" aria-label="Currency"><option value="QAR">🇶🇦 QAR</option><option value="USD">🇺🇸 USD</option><option value="EUR">🇪🇺 EUR</option><option value="GBP">🇬🇧 GBP</option><option value="AED">🇦🇪 AED</option><option value="SAR">🇸🇦 SAR</option><option value="KWD">🇰🇼 KWD</option><option value="BHD">🇧🇭 BHD</option><option value="OMR">🇴🇲 OMR</option></select>'
+          for p in root.rglob('*.html'):
+            t=p.read_text()
+            if 'id="currency-select"' not in t and 'class="language-switch"' in t:
+              t=re.sub(r'(<a class="language-switch"[^>]*>.*?</a>)',selector+r'\1',t,count=1)
+              p.write_text(t)
+          # Currency conversion runs client-side from QAR base prices. Fixed QAR peg/cross rates keep checkout display deterministic.
+          js=root/'currency.js'
+          js.write_text(r'''(()=>{\nconst rates={QAR:1,USD:0.274725,EUR:0.2345,GBP:0.2045,AED:1.0088,SAR:1.0302,KWD:0.0839,BHD:0.1033,OMR:0.1057};\nconst symbols={QAR:'QAR',USD:'$',EUR:'€',GBP:'£',AED:'AED',SAR:'SAR',KWD:'KWD',BHD:'BHD',OMR:'OMR'};\nlet currency=localStorage.getItem('sultana-currency')||'QAR';\nif(!rates[currency])currency='QAR';\nconst fmt=n=>{const v=n*rates[currency];return `${symbols[currency]} ${v.toLocaleString(undefined,{minimumFractionDigits:currency==='QAR'?0:2,maximumFractionDigits:2})}`};\nconst convertText=()=>{document.querySelectorAll('.price,.detail-price,#bag-total').forEach(el=>{if(!el.dataset.qar){const m=el.textContent.match(/QAR\\s*([\\d,.]+)/);if(m)el.dataset.qar=m[1].replace(/,/g,'')}if(el.dataset.qar)el.textContent=fmt(Number(el.dataset.qar))})};\nconst sync=()=>{document.querySelectorAll('#currency-select').forEach(s=>s.value=currency);convertText()};\ndocument.addEventListener('change',e=>{if(e.target.id==='currency-select'){currency=e.target.value;localStorage.setItem('sultana-currency',currency);sync()}});\nnew MutationObserver(convertText).observe(document.body,{subtree:true,childList:true,characterData:true});\ndocument.addEventListener('DOMContentLoaded',sync);\nwindow.addEventListener('load',sync);\n})();'''.replace('\\n','\n'))
+          for p in root.rglob('*.html'):
+            t=p.read_text()
+            if '/currency.js' not in t:
+              t=t.replace('</body>','<script src="/currency.js" defer></script></body>')
+              p.write_text(t)
+          PY
+      - name: Commit changes
+        shell: bash
+        run: |
+          if git diff --quiet; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add dist
+          git commit -m 'feat: add compact multi-currency selector'
+          git push
