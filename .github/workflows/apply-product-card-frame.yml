@@ -17,54 +17,21 @@ jobs:
       - name: Add refined Sultana product card frame
         shell: bash
         run: |
-          python - <<'PY'
-          from pathlib import Path
-          path = Path('dist/style.css')
-          css = path.read_text()
-          marker = '/* Sultana refined product card frame */'
-          if marker not in css:
-              css += r'''
+          cat >> dist/style.css <<'CSS'
 
-/* Sultana refined product card frame */
-.product-card{
-  position:relative;
-  padding:10px 10px 18px;
-  background:#fffdfa;
-  border:1px solid rgba(146,112,67,.46);
-  box-shadow:0 8px 24px rgba(92,68,39,.08);
-  transition:transform .3s var(--ease),box-shadow .3s var(--ease),border-color .3s var(--ease);
-}
-.product-card::before{
-  content:'';
-  position:absolute;
-  inset:5px;
-  border:1px solid rgba(196,164,112,.26);
-  pointer-events:none;
-  z-index:2;
-}
-.product-card:hover{
-  transform:translateY(-4px);
-  border-color:rgba(146,112,67,.72);
-  box-shadow:0 14px 34px rgba(92,68,39,.13);
-}
-.product-card .product-image{z-index:3}
-.product-card h3,.product-card .type,.product-card .price,.product-card .card-add{position:relative;z-index:3}
-.product-card .card-add{border-color:rgba(146,112,67,.55);background:#fffdfa}
-.product-card .card-add:hover{background:#927043;color:#fff;border-color:#927043}
-@media(max-width:540px){
-  .product-card{padding:7px 7px 14px}
-  .product-card::before{inset:3px}
-}
-'''
-              path.write_text(css)
-          PY
+          /* Sultana refined product card frame */
+          .product-card{position:relative;padding:10px 10px 18px;background:#fffdfa;border:1px solid rgba(146,112,67,.46);box-shadow:0 8px 24px rgba(92,68,39,.08);transition:transform .3s var(--ease),box-shadow .3s var(--ease),border-color .3s var(--ease)}
+          .product-card::before{content:'';position:absolute;inset:5px;border:1px solid rgba(196,164,112,.26);pointer-events:none;z-index:2}
+          .product-card:hover{transform:translateY(-4px);border-color:rgba(146,112,67,.72);box-shadow:0 14px 34px rgba(92,68,39,.13)}
+          .product-card .product-image{z-index:3}
+          .product-card h3,.product-card .type,.product-card .price,.product-card .card-add{position:relative;z-index:3}
+          .product-card .card-add{border-color:rgba(146,112,67,.55);background:#fffdfa}
+          .product-card .card-add:hover{background:#927043;color:#fff;border-color:#927043}
+          @media(max-width:540px){.product-card{padding:7px 7px 14px}.product-card::before{inset:3px}}
+          CSS
       - name: Commit change
         shell: bash
         run: |
-          if git diff --quiet; then
-            echo 'No change needed.'
-            exit 0
-          fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add dist/style.css
