@@ -490,3 +490,11 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 .product-card .card-add{border-color:rgba(146,112,67,.55);background:#fffdfa}
 .product-card .card-add:hover{background:#927043;color:#fff;border-color:#927043}
 @media(max-width:540px){.product-card{padding:7px 7px 14px}.product-card::before{inset:3px}}
+
+
+/* Compact currency + language controls */
+.currency-select{width:auto;max-width:92px;border:0;background:transparent;padding:5px 2px;font:500 10px/1.2 var(--sans);letter-spacing:.15px;cursor:pointer;color:var(--ink)}
+.language-switch{font-size:10px;line-height:1.2;white-space:nowrap;padding:6px 2px}
+.header-actions{gap:10px}
+@media(max-width:850px){.currency-select{max-width:76px;font-size:9px}.language-switch{font-size:9px}.header-actions{gap:3px}}
+@media(max-width:540px){.currency-select{max-width:70px;font-size:9px}.language-switch{font-size:9px;padding-inline:1px}}
