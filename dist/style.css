@@ -498,3 +498,9 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 .header-actions{gap:10px}
 @media(max-width:850px){.currency-select{max-width:76px;font-size:9px}.language-switch{font-size:9px}.header-actions{gap:3px}}
 @media(max-width:540px){.currency-select{max-width:70px;font-size:9px}.language-switch{font-size:9px;padding-inline:1px}}
+
+
+/* Footer Arabic brand name */
+.footer-arabic-brand{font-family:var(--serif);font-size:18px!important;line-height:1.35!important;color:var(--gold)!important;margin:-12px 0 14px!important;direction:rtl;text-align:left;width:240px;max-width:100%}
+html[dir="rtl"] .footer-arabic-brand{text-align:right}
+@media(max-width:700px){.footer-arabic-brand{font-size:17px!important;margin-top:-10px!important}}
