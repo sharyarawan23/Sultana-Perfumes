@@ -12,9 +12,9 @@
         <div id="collections-menu" hidden>
           <a href="/discovery-set/">Discovery Set</a>
           <a href="/gift/">Gift</a>
-          <a href="/wedding/">Wedding</a>
+          <a href="/wedding/">Wedding &amp; Event</a>
           <a href="/hospitality/">Hospitality</a>
-          <a href="/b2b/">B2B</a>
+          <a href="/b2b/">B2B &amp; Corporate</a>
           <a href="/gift-voucher/">Gift Voucher</a>
           <a href="/our-story/">Our Story</a>
         </div>
