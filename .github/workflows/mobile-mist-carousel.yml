@@ -1,0 +1,59 @@
+name: Mobile mist collection carousel
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/mobile-mist-carousel.yml'
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add mobile horizontal carousel styling
+        shell: bash
+        run: |
+          cat >> dist/style.css <<'CSS'
+
+/* Mobile mist collection: preserve card size and allow swipe/RTL scroll */
+@media (max-width:700px){
+  .mist-moments-grid,
+  .mist-use-grid,
+  .spray-use-grid,
+  .occasion-grid{
+    display:flex!important;
+    flex-wrap:nowrap!important;
+    gap:12px!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    -webkit-overflow-scrolling:touch;
+    scroll-snap-type:x mandatory;
+    scrollbar-width:none;
+    overscroll-behavior-inline:contain;
+    padding-right:0!important;
+    padding-bottom:8px!important;
+  }
+  .mist-moments-grid::-webkit-scrollbar,
+  .mist-use-grid::-webkit-scrollbar,
+  .spray-use-grid::-webkit-scrollbar,
+  .occasion-grid::-webkit-scrollbar{display:none}
+  .mist-moments-grid>* ,
+  .mist-use-grid>* ,
+  .spray-use-grid>* ,
+  .occasion-grid>*{
+    flex:0 0 calc((100% - 30px)/2)!important;
+    min-width:calc((100% - 30px)/2)!important;
+    scroll-snap-align:start;
+  }
+  html[dir="rtl"] .mist-moments-grid,
+  html[dir="rtl"] .mist-use-grid,
+  html[dir="rtl"] .spray-use-grid,
+  html[dir="rtl"] .occasion-grid{direction:rtl}
+}
+CSS
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add dist/style.css
+          git commit -m 'fix: mobile mist cards swipe with two visible and third peek' || exit 0
+          git push
