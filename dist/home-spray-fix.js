@@ -43,7 +43,7 @@
       slide.setAttribute('aria-label','4 of 4 — Sultana Story');
       slide.setAttribute('aria-hidden','true');
       slide.inert=true;
-      slide.innerHTML='<a class="supplied-banner-link" href="/our-story/" aria-label="Discover our story"><picture><img src="/assets/campaigns/hero-story-unified.webp" alt="Sultana Perfumes — A scented journey from Qatar to the world" width="2048" height="683" loading="lazy"></picture></a>';
+      slide.innerHTML='<a class="supplied-banner-link" href="/our-story/" aria-label="Discover our story"><picture><source media="(max-width: 700px)" srcset="/assets/campaigns/story-mobile.webp"><img src="/assets/campaigns/hero-story-unified.webp" alt="Sultana Perfumes — A scented journey from Qatar to the world" width="2048" height="683" loading="lazy"></picture></a>';
       stage.appendChild(slide);
     }
 
@@ -61,7 +61,6 @@
       dots.appendChild(dot4);
     }
 
-    /* Pause the original three-slide timer; this replacement controls all four. */
     if(autoplay && autoplay.getAttribute('aria-label')?.toLowerCase().includes('pause')) autoplay.click();
 
     const buttons=[...dots.querySelectorAll('[data-hero-target]')];
