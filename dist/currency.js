@@ -10,11 +10,14 @@ try{
     for(const p of newPerfumes){if(!products.some(x=>x.id===p.id))products.push(p)}
     const sigma=products.find(p=>p.id==='sigma');
     if(sigma)Object.assign(sigma,{price:375,collection:'Women',image:'assets/products-square/sigma.webp'});
-    const uniq=a=>[...new Set(a)];
-    collections.men=uniq((collections.men||[]).filter(id=>id!=='sigma').concat('lafista'));
-    collections.women=uniq((collections.women||[]).concat('one-kiss','sigma'));
-    collections.unisex=uniq((collections.unisex||[]).concat('tobacco'));
-    collections.perfume=uniq((collections.perfume||[]).concat('lafista','one-kiss','tobacco','sigma'));
+    const patchCollections=()=>{
+      const uniq=a=>[...new Set(a)];
+      collections.men=uniq((collections.men||[]).filter(id=>id!=='sigma').concat('lafista'));
+      collections.women=uniq((collections.women||[]).concat('one-kiss','sigma'));
+      collections.unisex=uniq((collections.unisex||[]).concat('tobacco'));
+      collections.perfume=uniq((collections.perfume||[]).concat('lafista','one-kiss','tobacco','sigma'));
+    };
+    patchCollections();
     if(typeof selectedProduct!=='undefined'&&document.body.dataset.productId){selectedProduct=products.find(p=>p.id===document.body.dataset.productId)||selectedProduct}
     if(document.getElementById('products')&&typeof renderProducts==='function')renderProducts();
     if(document.body.dataset.productId==='sigma'){
@@ -23,6 +26,8 @@ try{
     }
     if(typeof renderBag==='function')renderBag();
     if(typeof updateProductWhatsApp==='function')updateProductWhatsApp();
+    // shop/index.html resets gender arrays on DOMContentLoaded; re-apply after that listener.
+    document.addEventListener('DOMContentLoaded',()=>{patchCollections();if(document.getElementById('products')&&typeof syncCatalogFromUrl==='function')syncCatalogFromUrl()});
   }
 }catch(e){console.warn('Sultana product sync skipped',e)}
 
