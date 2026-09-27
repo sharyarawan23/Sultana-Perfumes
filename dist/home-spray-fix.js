@@ -8,16 +8,16 @@
   @media(max-width:700px){#bakhoor-products{display:flex!important;gap:14px!important;overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x mandatory!important;-webkit-overflow-scrolling:touch!important;padding-bottom:10px!important;margin-right:-5vw!important;margin-left:-5vw!important;padding-right:5vw!important;padding-left:5vw!important;scrollbar-width:none!important}#bakhoor-products::-webkit-scrollbar{display:none!important}#bakhoor-products .product-card{flex:0 0 clamp(245px,72vw,330px)!important;scroll-snap-align:start!important;min-width:0!important}.visual-home-menu{padding:22px 0 24px}.visual-home-menu-head{padding:0 18px;margin-bottom:14px}.visual-home-menu-head span{display:none}.visual-home-menu-grid{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:0 18px 7px;scrollbar-width:none}.visual-home-menu-grid::-webkit-scrollbar{display:none}.visual-menu-card{flex:0 0 138px;aspect-ratio:.9/1;scroll-snap-align:start}.visual-menu-card strong{font-size:17px;left:11px;right:8px;bottom:10px}}
   `;document.head.appendChild(style);
   const menuItems=[
-    ['Perfumes','/shop/?collection=perfume#collection','/assets/collection-notes/women-hd.webp'],
-    ['Luxury Spray','/room-sprays/','/assets/campaigns/hero-spray-unified.webp'],
-    ['Oud & Bakhoor','/oud-bakhoor/','/assets/campaigns/hero-bakhoor-unified.webp'],
-    ['Discovery Set','/products/discovery-set/','/assets/campaigns/discovery-set.webp'],
-    ['Gifts & Packaging','/shop/?collection=gift#collection','/assets/campaigns/spray-gift.webp'],
-    ['Weddings','/wedding-events/','/assets/campaigns/hero-lafiesta-unified.webp'],
-    ['Hospitality','/hospitality/','/assets/campaigns/oud-bakhoor.webp'],
-    ['B2B & Corporate','/business-corporate/','/assets/campaigns/oud-department-hd.webp'],
-    ['Gift Voucher','/shop/?collection=gift-voucher#collection','/assets/campaigns/supplied-gift.jpg'],
-    ['Our Story','/our-story/','/assets/campaigns/hero-story-unified.webp']
+    ['Perfumes','/shop/?collection=perfume#collection','/Perfumes/ChatGPT%20Image%20Sep%2027,%202026,%2007_24_09%20AM.png'],
+    ['Luxury Spray','/room-sprays/','/room-sprays/ChatGPT%20Image%20Sep%2027,%202026,%2007_23_58%20AM.png'],
+    ['Oud & Bakhoor','/oud-bakhoor/','/oud-bakhoor/ChatGPT%20Image%20Sep%2027,%202026,%2007_23_51%20AM.png'],
+    ['Discovery Set','/products/discovery-set/','/discovery-set/ChatGPT%20Image%20Sep%2027,%202026,%2007_23_44%20AM.png'],
+    ['Gifts & Packaging','/shop/?collection=gift#collection','/gift/ChatGPT%20Image%20Sep%2027,%202026,%2007_23_36%20AM.png'],
+    ['Weddings','/wedding-events/','/wedding/ChatGPT%20Image%20Sep%2027,%202026,%2007_23_41%20AM.png'],
+    ['Hospitality','/hospitality/','/hospitality/Sultana%20Perfumes%20Executive%20Gift%20Collection.png'],
+    ['B2B & Corporate','/business-corporate/','/business-corporate/ChatGPT%20Image%20Sep%2027,%202026,%2007_23_18%20AM.png'],
+    ['Gift Voucher','/shop/?collection=gift-voucher#collection','/gift-voucher/ChatGPT%20Image%20Sep%2027,%202026,%2007_23_12%20AM.png'],
+    ['Our Story','/our-story/','/our-story/ChatGPT%20Image%20Sep%2027,%202026,%2007_23_07%20AM.png']
   ];
   const buildVisualMenu=()=>{if(document.querySelector('.visual-home-menu'))return;document.body.classList.add('home-visual-nav');const hero=document.querySelector('.hero-carousel');if(!hero)return;const section=document.createElement('section');section.className='visual-home-menu';section.setAttribute('aria-label','Explore Sultana');section.innerHTML=`<div class="visual-home-menu-head"><p class="eyebrow">EXPLORE SULTANA</p><span>Discover our world</span></div><div class="visual-home-menu-grid">${menuItems.map(([title,href,img])=>`<a class="visual-menu-card" href="${href}"><img src="${img}" alt="" loading="lazy"><strong>${title}</strong></a>`).join('')}</div>`;hero.insertAdjacentElement('afterend',section)};
   const syncPrivateCollection=()=>{const g=document.querySelector('#bakhoor-products');if(!g||typeof products==='undefined'||typeof card!=='function')return;g.innerHTML=['sultana-oud','royal-bukhoor','amber-night','oud-collection-set'].map(id=>products.find(p=>p.id===id)).filter(Boolean).map(card).join('')};
