@@ -10,7 +10,7 @@ for p in records:
     assert re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*',p['id'])
     assert p['price'] is None or type(p['price']) in (int,float) and math.isfinite(p['price']) and p['price']>0
     assert p['currency']=='QAR' and p['type'] in types
-    assert re.fullmatch(r'assets/[a-z0-9/-]+\.webp',p['image']) and (dist/p['image']).is_file()
+    assert re.fullmatch(r'assets/[a-z0-9/-]+\.(?:webp|svg)',p['image']) and (dist/p['image']).is_file()
     assert p['page']=='products/'+p['id']+'/' and p['id'] in collection_data[p['collection']]
 assert all(id in {p['id'] for p in records} for members in collection_data.values() for id in members)
 products=[{**p,'type':types[p['type']]} for p in records]
