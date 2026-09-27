@@ -1,4 +1,5 @@
 name: Add four perfume products
+# retry after storefront asset validation update
 
 on:
   workflow_dispatch:
