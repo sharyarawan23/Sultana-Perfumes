@@ -1,4 +1,4 @@
-name: Sync footer Arabic brand name
+name: Remove duplicate footer Arabic brand name
 on:
   workflow_dispatch:
   push:
@@ -11,25 +11,37 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Add Arabic brand name below footer logo on every page
+      - name: Remove duplicate Arabic brand name beside footer logo on every page
         shell: bash
         run: |
           python - <<'PY'
           from pathlib import Path
           import re
-          root=Path('dist')
+
+          root = Path('dist')
           for p in root.rglob('*.html'):
-            t=p.read_text()
-            # Only footer brand logos, and skip pages that already have Arabic branding immediately after it.
-            pattern=r'(<a[^>]*class="[^"]*brand footer-brand[^"]*"[^>]*>.*?</a>)(?!\s*<p[^>]*class="footer-arabic-brand")'
-            repl=r'\1<p class="footer-arabic-brand" lang="ar" dir="rtl">سلطانة للعطور</p>'
-            nt,n=re.subn(pattern,repl,t,count=1,flags=re.S)
-            if n: p.write_text(nt)
-          css=root/'style.css'
-          s=css.read_text()
-          marker='/* Footer Arabic brand name */'
-          if marker not in s:
-            s += '''\n\n/* Footer Arabic brand name */\n.footer-arabic-brand{font-family:var(--serif);font-size:18px!important;line-height:1.35!important;color:var(--gold)!important;margin:-12px 0 14px!important;direction:rtl;text-align:left;width:240px;max-width:100%}\nhtml[dir="rtl"] .footer-arabic-brand{text-align:right}\n@media(max-width:700px){.footer-arabic-brand{font-size:17px!important;margin-top:-10px!important}}\n'''
+            t = p.read_text()
+            # Remove only the duplicate Arabic line immediately associated with the footer logo.
+            # Keep the existing lower .footer-arabic line unchanged.
+            nt = re.sub(
+              r'<p\s+class="footer-arabic-brand"\s+lang="ar"\s+dir="rtl">سلطانة للعطور</p>',
+              '',
+              t
+            )
+            if nt != t:
+              p.write_text(nt)
+
+          css = root / 'style.css'
+          if css.exists():
+            s = css.read_text()
+            s = re.sub(
+              r'\n*/\* Footer Arabic brand name \*/\n'
+              r'\.footer-arabic-brand\{[^\n]*\}\n'
+              r'html\[dir="rtl"\] \.footer-arabic-brand\{[^\n]*\}\n'
+              r'@media\(max-width:700px\)\{\.footer-arabic-brand\{[^\n]*\}\}\n?',
+              '\n',
+              s
+            )
             css.write_text(s)
           PY
       - name: Commit changes
@@ -39,5 +51,5 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add dist
-          git commit -m 'feat: add Arabic brand name below footer logo sitewide'
+          git commit -m 'fix: remove duplicate Arabic footer brand sitewide'
           git push
