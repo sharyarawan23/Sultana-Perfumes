@@ -1,0 +1,48 @@
+name: Add free delivery moving announcement
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/add-free-delivery-marquee.yml'
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add moving Free Delivery announcement sitewide
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          root=Path('dist')
+          for p in root.rglob('*.html'):
+              t=p.read_text()
+              if 'class="announcement"' not in t:
+                  continue
+              rtl = 'lang="ar"' in t[:500] or 'dir="rtl"' in t[:500]
+              delivery = 'توصيل مجاني' if rtl else 'FREE DELIVERY'
+              sep = ' ✦ '
+              items = sep.join([delivery,'SULTANA PERFUMES',delivery,'A SCENT FOR EVERY MOMENT',delivery,'QATAR · QAR'])
+              repl = '<div class="announcement announcement-marquee" aria-label="'+delivery+'"><div class="announcement-track"><span>'+items+'</span><span aria-hidden="true">'+items+'</span></div></div>'
+              nt,n=re.subn(r'<div class="announcement">.*?</div>',repl,t,count=1,flags=re.S)
+              if n:
+                  p.write_text(nt)
+          css=root/'style.css'
+          s=css.read_text()
+          marker='/* Free Delivery moving announcement */'
+          if marker not in s:
+              s += '''\n\n/* Free Delivery moving announcement */\n.announcement-marquee{overflow:hidden!important;padding:0!important;display:block!important;white-space:nowrap}.announcement-marquee .announcement-track{display:flex;width:max-content;height:32px;align-items:center;animation:sultanaAnnouncementScroll 24s linear infinite;will-change:transform}.announcement-marquee .announcement-track span{display:inline-block;padding-right:70px;font-size:10px;letter-spacing:1.7px;color:#f4eee3}.announcement-marquee .announcement-track span::first-letter{color:inherit}@keyframes sultanaAnnouncementScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}@media(max-width:700px){.announcement-marquee .announcement-track{animation-duration:18s}.announcement-marquee .announcement-track span{padding-right:48px}}@media(prefers-reduced-motion:reduce){.announcement-marquee .announcement-track{animation:none}}\n'''
+              css.write_text(s)
+          PY
+      - name: Commit changes
+        shell: bash
+        run: |
+          if git diff --quiet; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add dist
+          git commit -m 'feat: add moving Free Delivery announcement sitewide'
+          git push
