@@ -1,0 +1,57 @@
+name: Add fragrance family and character
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/add-fragrance-family-character.yml'
+permissions:
+  contents: write
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add exact supplied fragrance metadata
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('data/products.json')
+          data=json.loads(p.read_text())
+          vals={
+            'ajwan':('Oriental · Tonka · Sweet · Woody','Warm · Creamy · Sweet · Soft · Luxurious'),
+            'lenden':('Oriental · Sweet · Spicy · Woody','Warm · Rich · Sweet · Alluring · Luxurious'),
+            'casa-blanca':('Amber · Sweet · Warm · Oriental','Luxurious · Warm · Soft · Sensual · Elegant'),
+            'patchouli':('Woody · Earthy · Oriental','Deep · Warm · Mysterious · Elegant · Luxurious'),
+            'tobacco':('Oriental · Tobacco · Vanilla · Woody','Warm · Sweet · Rich · Elegant · Luxurious'),
+            'amicare':('Oriental · Oud · Woody · Spicy','Bold · Warm · Powerful · Luxurious · Seductive'),
+            'portofino':('Citrus · Aquatic · Woody','Fresh · Clean · Bright · Elegant · Modern'),
+            'lafiesta':('Oriental · Floral · Woody · Amber','Warm · Elegant · Alluring · Luxurious · Mysterious'),
+            'ayla':('Floral · Oriental · Woody · Spicy','Bold · Feminine · Sensual · Warm · Magnetic'),
+            'vanilla-elixir':('Oriental · Vanilla · Amber · Woody','Sweet · Warm · Creamy · Feminine · Luxurious'),
+            'sigma':('Oriental · Floral · Warm',None),
+            'oud-rose':('Oriental · Oud · Floral','Warm · Luxurious · Elegant · Oriental · Captivating'),
+          }
+          for x in data:
+            if x['id'] in vals:
+              fam,char=vals[x['id']]
+              x['fragrance_family']=fam
+              if char is not None: x['character']=char
+              else: x.pop('character',None)
+          p.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+
+          g=Path('scripts/generate-product-pages.py')
+          s=g.read_text()
+          old="specs=f'<div><dt>Size</dt><dd>{e(p[\"size\"])}</dd></div>' if p['size'] else ''"
+          new="specs=f'<div><dt>Size</dt><dd>{e(p[\"size\"])}</dd></div>' if p['size'] else ''\n    specs += f'<div><dt>Fragrance Family</dt><dd>{e(p[\"fragrance_family\"])}</dd></div>' if p.get('fragrance_family') else ''\n    specs += f'<div><dt>Character</dt><dd>{e(p[\"character\"])}</dd></div>' if p.get('character') else ''"
+          if old not in s: raise SystemExit('generator target not found')
+          g.write_text(s.replace(old,new,1))
+          PY
+          python3 scripts/generate-product-pages.py
+      - name: Commit updates
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/products.json data/products.csv scripts/generate-product-pages.py dist
+          git diff --cached --quiet || git commit -m 'Show exact fragrance family and character on perfume pages'
+          git push
