@@ -1,5 +1,5 @@
 name: Add four perfume products
-# use uploaded JPG product images with matching file type
+# use the exact uploaded WEBP product images already stored in dist/assets/products-square
 
 on:
   workflow_dispatch:
@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Add Lafiesta, One Kiss, Tobacco and update Sigma
+      - name: Add Lafista, One Kiss, Tobacco and update Sigma
         shell: bash
         run: |
           python3 - <<'PY'
@@ -29,29 +29,29 @@ jobs:
 
           entries=[
             {
-              'id':'lafiesta','name':'Lafiesta','price':375,'currency':'QAR','type':'Perfume','size':'100 ml','collection':'Men',
-              'image':'assets/products-square/lafiesta-men.jpg','page':'products/lafiesta/',
-              'description':'Discover Lafiesta from the Sultana perfume collection, presented in a signature gold-capped bottle.',
+              'id':'lafiesta','name':'Lafista','price':375,'currency':'QAR','type':'Perfume','size':'100 ml','collection':'Men',
+              'image':'assets/products-square/lafista.webp','page':'products/lafiesta/',
+              'description':'Discover Lafista from the Sultana perfume collection, presented in a signature gold-capped bottle.',
               'name_ar':'لافيستا','description_ar':'اكتشف لافيستا من مجموعة عطور سلطانة، في زجاجة مميزة بغطاء ذهبي.',
               'description_title':'','description_title_ar':'','tagline':'','tagline_ar':''
             },
             {
               'id':'one-kiss','name':'One Kiss','price':375,'currency':'QAR','type':'Perfume','size':'100 ml','collection':'Women',
-              'image':'assets/products-square/one-kiss-women.jpg','page':'products/one-kiss/',
+              'image':'assets/products-square/one-kiss.webp','page':'products/one-kiss/',
               'description':'Discover One Kiss from the Sultana perfume collection, presented in a signature gold-capped bottle.',
               'name_ar':'ون كيس','description_ar':'اكتشف ون كيس من مجموعة عطور سلطانة، في زجاجة مميزة بغطاء ذهبي.',
               'description_title':'','description_title_ar':'','tagline':'','tagline_ar':''
             },
             {
               'id':'tobacco','name':'Tobacco','price':375,'currency':'QAR','type':'Perfume','size':'100 ml','collection':'Unisex',
-              'image':'assets/products-square/tobacco-uni.jpg','page':'products/tobacco/',
+              'image':'assets/products-square/tobacco.webp','page':'products/tobacco/',
               'description':'Discover Tobacco from the Sultana perfume collection, presented in a signature gold-capped bottle.',
               'name_ar':'توباكو','description_ar':'اكتشف توباكو من مجموعة عطور سلطانة، في زجاجة مميزة بغطاء ذهبي.',
               'description_title':'','description_title_ar':'','tagline':'','tagline_ar':''
             },
             {
               'id':'sigma','name':'Sigma','price':375,'currency':'QAR','type':'Perfume','size':'100 ml','collection':'Women',
-              'image':'assets/products-square/sigma-women.jpg','page':'products/sigma/',
+              'image':'assets/products-square/sigma.webp','page':'products/sigma/',
               'description':'Discover Sigma from the Sultana perfume collection, presented in a signature gold-capped bottle.',
               'name_ar':'سيغما','description_ar':'اكتشف سيغما من مجموعة عطور سلطانة، في زجاجة مميزة بغطاء ذهبي.',
               'description_title':'','description_title_ar':'','tagline':'','tagline_ar':''
@@ -88,5 +88,5 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add data dist
-          git commit -m 'fix: use uploaded images for four perfumes'
+          git commit -m 'feat: add four perfumes with exact uploaded images'
           git push
