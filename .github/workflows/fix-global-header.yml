@@ -1,0 +1,46 @@
+name: Fix global Sultana header
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/fix-global-header.yml'
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Rebuild header on every page
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          root=Path('dist')
+          nav='''<nav class="desktop-luxury-nav" aria-label="Main navigation"><a href="/">Home</a><a href="/shop/?collection=perfume#collection">Perfumes</a><a href="/room-sprays/">Luxury Spray</a><a href="/oud-bakhoor/">Oud &amp; Bakhoor</a><a href="/b2b/">B2B</a><a href="/our-story/">Our Story</a><a href="/contact/">Contact</a></nav>'''
+          css='''<style id="global-luxury-header">@media(min-width:851px){header{height:160px!important;min-height:160px!important;padding:0 5%!important;display:grid!important;grid-template-columns:1fr auto 1fr!important;grid-template-rows:112px 48px!important;gap:0 24px!important;align-items:center!important;background:#fffdfa!important}header>.brand{grid-column:2!important;grid-row:1!important;justify-self:center!important;position:static!important;transform:none!important;width:92px!important;height:102px!important;margin:0!important}header>.brand img{width:100%!important;height:100%!important;object-fit:contain!important}header>.header-actions{grid-column:3!important;grid-row:1!important;justify-self:end!important;display:flex!important;align-items:center!important;gap:18px!important}header>.header-actions .currency-select,header>.header-actions .language-switch{display:inline-block!important}header>#main-navigation{display:none!important}header>.menu-toggle{display:none!important}.desktop-luxury-nav{grid-column:1/-1!important;grid-row:2!important;display:flex!important;visibility:visible!important;opacity:1!important;position:static!important;transform:none!important;width:100%!important;height:48px!important;align-items:center!important;justify-content:center!important;gap:clamp(25px,3vw,52px)!important;background:#fffdfa!important}.desktop-luxury-nav a{display:block!important;color:#17130f!important;font:500 11px/48px var(--sans,Arial,sans-serif)!important;letter-spacing:.35px!important;text-transform:uppercase!important;white-space:nowrap!important}.desktop-header-left{grid-column:1!important;grid-row:1!important;justify-self:start!important;display:flex!important;align-items:center!important;gap:12px!important;font-size:12px!important}header>.header-actions .currency-select,header>.header-actions .language-switch{display:none!important}}@media(max-width:850px){.desktop-luxury-nav,.desktop-header-left{display:none!important}}</style>'''
+          for p in root.rglob('*.html'):
+            t=p.read_text()
+            # Remove prior injected static header helpers if workflow is rerun.
+            t=re.sub(r'<nav class="desktop-luxury-nav".*?</nav>','',t,flags=re.S)
+            t=re.sub(r'<div class="desktop-header-left".*?</div>','',t,flags=re.S)
+            t=re.sub(r'<style id="global-luxury-header">.*?</style>','',t,flags=re.S)
+            # Insert desktop nav inside header, after the brand/actions markup is already present.
+            end=t.find('</header>')
+            if end!=-1:
+              t=t[:end]+nav+t[end:]
+            t=t.replace('</head>',css+'</head>',1)
+            # Cache-bust global currency/header script so latest layout logic is fetched.
+            t=re.sub(r'<script src="/currency\.js(?:\?[^\"]*)?" defer></script>','<script src="/currency.js?v=header-20260928-3" defer></script>',t)
+            p.write_text(t)
+          PY
+      - name: Commit rebuilt headers
+        shell: bash
+        run: |
+          if git diff --quiet; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add dist
+          git commit -m 'fix: show centered desktop menu below logo on all pages'
+          git push
