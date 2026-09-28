@@ -1,19 +1,15 @@
 {
   "Women": [
     "ayla",
-    "vanilla-elixir",
-    "ajwan",
-    "amicare",
     "one-kiss",
-    "sigma"
+    "sigma",
+    "vanilla-elixir",
+    "oud-rose"
   ],
   "Men": [
-    "oud-rose",
+    "lafiesta",
     "portofino",
-    "patchouli",
-    "lenden",
-    "casa-blanca",
-    "lafiesta"
+    "amicare"
   ],
   "Luxury Home Spray": [
     "black-london",
@@ -23,7 +19,11 @@
     "cotton-candy"
   ],
   "Unisex": [
-    "tobacco"
+    "patchouli",
+    "casa-blanca",
+    "tobacco",
+    "lenden",
+    "ajwan"
   ],
   "Oud, Bakhoor & Loban": [
     "oud-amber",
