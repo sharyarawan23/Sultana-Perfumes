@@ -15,7 +15,9 @@
     "description_title": "Bold Femininity, An Unforgettable Presence.",
     "description_title_ar": "أنوثة جريئة بحضور لا يُنسى.",
     "tagline": "",
-    "tagline_ar": ""
+    "tagline_ar": "",
+    "fragrance_family": "Floral · Oriental · Woody · Spicy",
+    "character": "Bold · Feminine · Sensual · Warm · Magnetic"
   },
   {
     "id": "vanilla-elixir",
@@ -33,7 +35,9 @@
     "description_title": "A luxurious and elegant interpretation of vanilla.",
     "description_title_ar": "تفسير فاخر وأنيق للفانيلا.",
     "tagline": "",
-    "tagline_ar": ""
+    "tagline_ar": "",
+    "fragrance_family": "Oriental · Vanilla · Amber · Woody",
+    "character": "Sweet · Warm · Creamy · Feminine · Luxurious"
   },
   {
     "id": "oud-rose",
@@ -51,7 +55,9 @@
     "description_title": "",
     "description_title_ar": "",
     "tagline": "Oud Rose — The timeless luxury of oud wrapped in the delicate beauty of Oriental rose.",
-    "tagline_ar": "عود روز — فخامة العود الخالدة بلمسة رقيقة من الورد الشرقي."
+    "tagline_ar": "عود روز — فخامة العود الخالدة بلمسة رقيقة من الورد الشرقي.",
+    "fragrance_family": "Oriental · Oud · Floral",
+    "character": "Warm · Luxurious · Elegant · Oriental · Captivating"
   },
   {
     "id": "portofino",
@@ -69,7 +75,9 @@
     "description_title": "Citrus Freshness with a Modern, Elegant Edge.",
     "description_title_ar": "انتعاش حمضي بلمسة أنيقة وعصرية.",
     "tagline": "",
-    "tagline_ar": ""
+    "tagline_ar": "",
+    "fragrance_family": "Citrus · Aquatic · Woody",
+    "character": "Fresh · Clean · Bright · Elegant · Modern"
   },
   {
     "id": "patchouli",
@@ -87,7 +95,9 @@
     "description_title": "The Depth of Patchouli with a Luxurious, Mysterious Touch.",
     "description_title_ar": "عمق الباتشولي بلمسة فاخرة وغامضة.",
     "tagline": "",
-    "tagline_ar": ""
+    "tagline_ar": "",
+    "fragrance_family": "Woody · Earthy · Oriental",
+    "character": "Deep · Warm · Mysterious · Elegant · Luxurious"
   },
   {
     "id": "ajwan",
@@ -105,7 +115,9 @@
     "description_title": "The Warmth of Tonka with a Soft, Luxurious Touch.",
     "description_title_ar": "دفء التونكا بلمسة ناعمة وفاخرة.",
     "tagline": "",
-    "tagline_ar": ""
+    "tagline_ar": "",
+    "fragrance_family": "Oriental · Tonka · Sweet · Woody",
+    "character": "Warm · Creamy · Sweet · Soft · Luxurious"
   },
   {
     "id": "lenden",
@@ -123,7 +135,9 @@
     "description_title": "Rich Oriental Warmth with a Captivating Presence.",
     "description_title_ar": "دفء شرقي غني بحضور ساحر.",
     "tagline": "",
-    "tagline_ar": ""
+    "tagline_ar": "",
+    "fragrance_family": "Oriental · Sweet · Spicy · Woody",
+    "character": "Warm · Rich · Sweet · Alluring · Luxurious"
   },
   {
     "id": "casa-blanca",
@@ -141,7 +155,9 @@
     "description_title": "The Warmth of Amber with a Luxurious Touch.",
     "description_title_ar": "دفء العنبر بلمسة فاخرة وراقية.",
     "tagline": "",
-    "tagline_ar": ""
+    "tagline_ar": "",
+    "fragrance_family": "Amber · Sweet · Warm · Oriental",
+    "character": "Luxurious · Warm · Soft · Sensual · Elegant"
   },
   {
     "id": "amicare",
@@ -159,7 +175,9 @@
     "description_title": "Luxury, Power & an Unforgettable Presence.",
     "description_title_ar": "فخامة وقوة وحضور لا يُنسى.",
     "tagline": "",
-    "tagline_ar": ""
+    "tagline_ar": "",
+    "fragrance_family": "Oriental · Oud · Woody · Spicy",
+    "character": "Bold · Warm · Powerful · Luxurious · Seductive"
   },
   {
     "id": "sigma",
@@ -177,7 +195,8 @@
     "description_title": "A Mysterious, Elegant & Irresistible Presence.",
     "description_title_ar": "حضور غامض، أنيق ولا يُقاوم.",
     "tagline": "",
-    "tagline_ar": ""
+    "tagline_ar": "",
+    "fragrance_family": "Oriental · Floral · Warm"
   },
   {
     "id": "black-london",
@@ -519,7 +538,9 @@
     "description_title": "Oriental Elegance with a Modern Touch.",
     "description_title_ar": "أناقة شرقية بلمسة عصرية.",
     "tagline": "",
-    "tagline_ar": ""
+    "tagline_ar": "",
+    "fragrance_family": "Oriental · Floral · Woody · Amber",
+    "character": "Warm · Elegant · Alluring · Luxurious · Mysterious"
   },
   {
     "id": "one-kiss",
@@ -555,6 +576,8 @@
     "description_title": "The Warmth of Tobacco with a Luxurious Touch of Vanilla.",
     "description_title_ar": "دفء التبغ بلمسة فاخرة من الفانيلا.",
     "tagline": "",
-    "tagline_ar": ""
+    "tagline_ar": "",
+    "fragrance_family": "Oriental · Tobacco · Vanilla · Woody",
+    "character": "Warm · Sweet · Rich · Elegant · Luxurious"
   }
 ]

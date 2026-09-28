@@ -43,6 +43,8 @@ for p in records:
     heading=f'<h2 class="description-heading">{e(p["description_title"])}</h2>' if p['description_title'] else ''
     tagline=f'<p class="product-tagline">{e(p["tagline"])}</p>' if p['tagline'] else ''
     specs=f'<div><dt>Size</dt><dd>{e(p["size"])}</dd></div>' if p['size'] else ''
+    specs += f'<div><dt>Fragrance Family</dt><dd>{e(p["fragrance_family"])}</dd></div>' if p.get('fragrance_family') else ''
+    specs += f'<div><dt>Character</dt><dd>{e(p["character"])}</dd></div>' if p.get('character') else ''
     purchase='<div class="purchase-row"><div class="quantity" role="group" aria-label="Quantity"><button data-quantity="-1" aria-label="Decrease quantity">−</button><output id="quantity" aria-live="polite">1</output><button data-quantity="1" aria-label="Increase quantity">+</button></div><button class="button" id="add-to-bag">Add to Bag</button></div><a class="button whatsapp-order" id="product-whatsapp" href="https://wa.me/97433901711" target="_blank" rel="noopener noreferrer">Order on WhatsApp</a><p class="sample-note">Confirm your order and delivery details on WhatsApp.</p>'
     portrait=' portrait-product' if p['id'] in ('machmoun','cotton-candy') else ''
     body=f'''<main class="product-page" id="main-content"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/#collection">Collection</a><span aria-hidden="true">/</span><span aria-current="page">{name}</span></nav>
