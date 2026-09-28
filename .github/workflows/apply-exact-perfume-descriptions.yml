@@ -1,0 +1,112 @@
+name: Apply exact supplied perfume descriptions
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-exact-perfume-descriptions.yml'
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply supplied bilingual perfume copy
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('data/products.json')
+          data=json.loads(p.read_text())
+          copy={
+            'ajwan': {
+              'description_title':'The Warmth of Tonka with a Soft, Luxurious Touch.',
+              'description':'A warm and sweet fragrance blending the smooth richness of tonka bean with creamy and woody accords, creating an elegant and comforting composition with a sensual and captivating character.',
+              'description_title_ar':'دفء التونكا بلمسة ناعمة وفاخرة.',
+              'description_ar':'عطر دافئ وحلو يجمع بين نعومة وغنى حبوب التونكا ولمسات كريمية وخشبية، ليمنح تركيبة أنيقة ومريحة بطابع حسي وجذاب.',
+              'tagline':'','tagline_ar':''},
+            'lenden': {
+              'description_title':'Rich Oriental Warmth with a Captivating Presence.',
+              'description':'A warm Oriental fragrance that blends sweet, spicy, and woody accords into a rich and smooth composition. Its deep and alluring character creates a luxurious presence with a long-lasting trail.',
+              'description_title_ar':'دفء شرقي غني بحضور ساحر.',
+              'description_ar':'عطر شرقي دافئ يجمع بين النفحات الحلوة والتوابل والأخشاب في تركيبة غنية وناعمة. يتميز بطابع عميق وجذاب يمنح حضوراً فاخراً وأثراً يدوم.',
+              'tagline':'','tagline_ar':''},
+            'casa-blanca': {
+              'description_title':'The Warmth of Amber with a Luxurious Touch.',
+              'description':'A rich amber fragrance blending warm amber with soft, sweet accords that add depth and elegance to the composition. Its warm and luxurious character leaves a refined, sensual, and distinctive trail on the skin.',
+              'description_title_ar':'دفء العنبر بلمسة فاخرة وراقية.',
+              'description_ar':'عطر عنبري غني يجمع بين دفء العنبر ولمسات ناعمة وحلوة تضيف عمقاً وأناقة إلى التركيبة. بطابعه الدافئ والفاخر، يترك أثراً راقياً وحسياً ومميزاً على البشرة.',
+              'tagline':'','tagline_ar':''},
+            'patchouli': {
+              'description_title':'The Depth of Patchouli with a Luxurious, Mysterious Touch.',
+              'description':'A rich and elegant fragrance centered around the deep, earthy character of patchouli, beautifully blended with warm and woody accords. The result is a sophisticated composition with a strong personality and an unforgettable presence.',
+              'description_title_ar':'عمق الباتشولي بلمسة فاخرة وغامضة.',
+              'description_ar':'عطر غني وأنيق يتمحور حول الطابع الترابي العميق للباتشولي، ممزوجاً بتناغم مع نفحات دافئة وخشبية. تركيبة متطورة تتميز بشخصية قوية وحضور لا يُنسى.',
+              'tagline':'','tagline_ar':''},
+            'tobacco': {
+              'description_title':'The Warmth of Tobacco with a Luxurious Touch of Vanilla.',
+              'description':'A rich and warm fragrance blending deep tobacco notes with smooth, sweet vanilla, enhanced by Oriental and woody accords for an elegant, captivating, and long-lasting trail.',
+              'description_title_ar':'دفء التبغ بلمسة فاخرة من الفانيلا.',
+              'description_ar':'عطر دافئ وغني يجمع بين نفحات التبغ العميقة وحلاوة الفانيلا الناعمة، مع لمسات شرقية وخشبية تمنحه طابعاً أنيقاً وجذاباً وأثراً يدوم.',
+              'tagline':'','tagline_ar':''},
+            'amicare': {
+              'description_title':'Luxury, Power & an Unforgettable Presence.',
+              'description':'A bold and sophisticated fragrance that blends rich Oriental oud with warm, spicy and woody accords, creating a powerful composition with a luxurious and captivating trail.',
+              'description_title_ar':'فخامة وقوة وحضور لا يُنسى.',
+              'description_ar':'عطر جريء وأنيق يجمع بين عود شرقي غني والنفحات الدافئة والتوابل والأخشاب، ليمنح تركيبة قوية ذات أثر فاخر وجذاب.',
+              'tagline':'','tagline_ar':''},
+            'portofino': {
+              'description_title':'Citrus Freshness with a Modern, Elegant Edge.',
+              'description':'A fresh and vibrant fragrance that combines sparkling citrus notes with clean, aquatic accords and a smooth woody base, creating a perfectly balanced scent with a refined and lasting presence.',
+              'description_title_ar':'انتعاش حمضي بلمسة أنيقة وعصرية.',
+              'description_ar':'عطر منعش وحيوي يمزج بين الحمضيات المتألقة والنفحات المائية النظيفة مع قاعدة خشبية ناعمة، ليمنح رائحة متوازنة بحضور أنيق يدوم.',
+              'tagline':'','tagline_ar':''},
+            'lafiesta': {
+              'description_title':'Oriental Elegance with a Modern Touch.',
+              'description':'A rich and elegant fragrance that blends warm Oriental accords with soft, refined notes, creating a beautifully balanced composition with a sophisticated and captivating presence.',
+              'description_title_ar':'أناقة شرقية بلمسة عصرية.',
+              'description_ar':'عطر غني وأنيق يجمع بين النفحات الشرقية الدافئة ولمسات ناعمة وراقية، ليمنح حضوراً متوازناً وجذاباً مع أثر يدوم.',
+              'tagline':'','tagline_ar':''},
+            'ayla': {
+              'description_title':'Bold Femininity, An Unforgettable Presence.',
+              'description':'A feminine Oriental floral fragrance that blends the radiant warmth of vanilla and ginger with the delicate elegance of orange blossom and jasmine. A warm base of patchouli and sandalwood adds depth and a captivating, magnetic presence.',
+              'description_title_ar':'أنوثة جريئة بحضور لا يُنسى.',
+              'description_ar':'عطر أنثوي شرقي زهري يجمع بين إشراقة الفانيلا والزنجبيل ونعومة زهر البرتقال والياسمين، مع قاعدة دافئة من الباتشولي وخشب الصندل تمنحه عمقاً وحضوراً مغناطيسياً.',
+              'tagline':'','tagline_ar':''},
+            'vanilla-elixir': {
+              'description_title':'A luxurious and elegant interpretation of vanilla.',
+              'description':'The fragrance opens with a bright and spicy touch of bergamot and pink pepper, revealing a rich, creamy vanilla heart delicately blended with soft floral notes.\n\nIn the base, amber, tonka bean, sandalwood, and musk come together to create warmth, softness, and depth, leaving a sensual and lingering trail on the skin.',
+              'description_title_ar':'تفسير فاخر وأنيق للفانيلا.',
+              'description_ar':'يفتتح العطر بإشراقة منعشة وحارة من البرغموت والفلفل الوردي، ثم يكشف عن قلب غني وكريمي من الفانيلا ممزوج برقة مع نفحات زهرية ناعمة.\n\nفي القاعدة، يجتمع العنبر وحبوب التونكا وخشب الصندل والمسك ليمنح العطر دفئاً ونعومة وعمقاً، مع أثر حسي يدوم على البشرة.',
+              'tagline':'','tagline_ar':''},
+            'sigma': {
+              'description_title':'A Mysterious, Elegant & Irresistible Presence.',
+              'description':'A feminine Oriental floral fragrance that blends a bright, refreshing opening with delicate florals at the heart and the warmth of woods and amber in the base.\n\nA beautifully balanced composition that reveals a mysterious and alluring character, leaving a soft, sensual trail and an unforgettable presence.',
+              'description_title_ar':'حضور غامض، أنيق ولا يُقاوم.',
+              'description_ar':'عطر أنثوي شرقي زهري يمزج بين افتتاحية مشرقة ومنعشة وقلب من الزهور الرقيقة، مع دفء الأخشاب والعنبر في القاعدة.\n\nتركيبة متوازنة تكشف عن شخصية غامضة وجذابة، وتترك أثراً ناعماً وحسياً وحضوراً لا يُنسى.',
+              'tagline':'','tagline_ar':''},
+            'oud-rose': {
+              'description_title':'',
+              'description':'A luxurious Oriental fragrance with an authentic Gulf character — warm, elegant, and captivating. Oud Rose evokes the enchanting feeling of being freshly perfumed with the finest oud and incense.\n\nThe richness of precious oud blends beautifully with the softness of rose, creating a sophisticated Oriental harmony. Warm and distinctive, it leaves an elegant and captivating trail that lingers beautifully on the skin.',
+              'description_title_ar':'',
+              'description_ar':'عطر شرقي فاخر بطابع خليجي أصيل، دافئ وأنيق وآسر، يمنح إحساساً بالتعطر بأجود أنواع العود والبخور.\n\nيمتزج غنى العود الثمين مع نعومة الورد بتناغم شرقي راقٍ، ليمنح حضوراً مميزاً ودافئاً ويترك أثراً أنيقاً وجذاباً يدوم على البشرة.',
+              'tagline':'Oud Rose — The timeless luxury of oud wrapped in the delicate beauty of Oriental rose.',
+              'tagline_ar':'عود روز — فخامة العود الخالدة بلمسة رقيقة من الورد الشرقي.'}
+          }
+          found=set()
+          for item in data:
+            if item.get('id') in copy:
+              item.update(copy[item['id']]); found.add(item['id'])
+          missing=set(copy)-found
+          if missing: raise SystemExit(f'Missing products: {sorted(missing)}')
+          p.write_text(json.dumps(data, ensure_ascii=False, indent=2)+'\n')
+          PY
+      - name: Regenerate storefront product pages
+        run: python3 scripts/generate-product-pages.py
+      - name: Commit exact supplied descriptions
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/products.json data/products.csv dist/app.js dist/products
+          git diff --cached --quiet || git commit -m 'Use supplied perfume descriptions exactly'
+          git push
