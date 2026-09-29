@@ -1,4 +1,4 @@
-name: Restore homepage collection banner
+name: Restore perfume vertical collection banners
 on:
   push:
     paths:
@@ -11,25 +11,41 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Restore collection banner
+      - name: Move collection banners to perfume shop
         run: |
           python - <<'PY'
           from pathlib import Path
-          p=Path('dist/index.html')
-          s=p.read_text()
-          marker='<section class="section-shell featured-section" id="best-sellers">'
-          if 'id="collection-showcase"' not in s:
-              block='''<section class="section-shell" id="collection-showcase" aria-labelledby="collection-showcase-title"><div class="section-heading"><div><p class="eyebrow">COLLECTIONS</p><h2 id="collection-showcase-title">Find your collection.</h2></div></div><div class="category-section"><a class="category-card" href="/shop/?collection=men#collection" aria-label="Shop Men collection"><img src="/assets/collections/men-hd.webp" alt="Men fragrance collection" loading="lazy"><div><p class="eyebrow">SULTANA PERFUMES</p><h3>Men</h3><span>Shop collection <b>→</b></span></div></a><a class="category-card" href="/shop/?collection=women#collection" aria-label="Shop Women collection"><img src="/assets/collections/women-hd.webp" alt="Women fragrance collection" loading="lazy"><div><p class="eyebrow">SULTANA PERFUMES</p><h3>Women</h3><span>Shop collection <b>→</b></span></div></a><a class="category-card" href="/shop/?collection=unisex#collection" aria-label="Shop Unisex collection"><img src="/assets/collections/unisex-hd.webp" alt="Unisex fragrance collection" loading="lazy"><div><p class="eyebrow">SULTANA PERFUMES</p><h3>Unisex</h3><span>Shop collection <b>→</b></span></div></a></div></section>\n'''
-              if marker not in s:
-                  raise SystemExit('best sellers marker missing')
-              s=s.replace(marker,block+marker,1)
-              p.write_text(s)
+          import re
+
+          # Remove the mistakenly-added collection showcase from Home.
+          home=Path('dist/index.html')
+          s=home.read_text()
+          s=re.sub(r'<section class="section-shell" id="collection-showcase".*?</section>\s*', '', s, count=1, flags=re.S)
+          home.write_text(s)
+
+          # Restore the vertical Men / Women / Unisex banners inside Perfumes/Shop.
+          shop=Path('dist/shop/index.html')
+          s=shop.read_text()
+          # Remove an older copy first so this remains idempotent.
+          s=re.sub(r'<section class="perfume-collection-banners".*?</section>\s*', '', s, count=1, flags=re.S)
+          marker='<section class="shop-section section-shell" id="collection">'
+          block='''<section class="perfume-collection-banners" aria-label="Perfume collections"><a class="perfume-collection-banner" href="/shop/?collection=men#collection" aria-label="Shop Men perfumes"><img src="/assets/collections/men-hd.webp" alt="Men perfume collection" loading="eager"></a><a class="perfume-collection-banner" href="/shop/?collection=women#collection" aria-label="Shop Women perfumes"><img src="/assets/collections/women-hd.webp" alt="Women perfume collection" loading="eager"></a><a class="perfume-collection-banner" href="/shop/?collection=unisex#collection" aria-label="Shop Unisex perfumes"><img src="/assets/collections/unisex-hd.webp" alt="Unisex perfume collection" loading="eager"></a></section>\n'''
+          if marker not in s:
+              raise SystemExit('shop collection marker missing')
+          s=s.replace(marker,block+marker,1)
+          shop.write_text(s)
+
+          css=Path('dist/style.css')
+          c=css.read_text()
+          if '/* perfume-vertical-collection-banners */' not in c:
+              c += '''\n/* perfume-vertical-collection-banners */\n.perfume-collection-banners{max-width:1420px;margin:0 auto;padding:48px 5% 18px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}.perfume-collection-banner{display:block;position:relative;overflow:hidden;background:#eee8de;aspect-ratio:3/4}.perfume-collection-banner img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s var(--ease)}.perfume-collection-banner:hover img{transform:scale(1.025)}@media(max-width:700px){.perfume-collection-banners{display:flex;overflow-x:auto;gap:12px;padding:28px 5% 12px;scroll-snap-type:x mandatory}.perfume-collection-banner{flex:0 0 78%;scroll-snap-align:start}}\n'''
+              css.write_text(c)
           PY
-      - name: Commit restored banner
+      - name: Commit corrected banner placement
         run: |
           if git diff --quiet; then exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dist/index.html
-          git commit -m "fix: restore homepage perfume collection banner"
+          git add dist/index.html dist/shop/index.html dist/style.css
+          git commit -m "fix: restore vertical perfume collection banners in shop only"
           git push
