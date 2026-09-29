@@ -11,41 +11,36 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Move collection banners to perfume shop
+      - name: Fix perfume collection banners on desktop and mobile
         run: |
           python - <<'PY'
           from pathlib import Path
           import re
 
-          # Remove the mistakenly-added collection showcase from Home.
           home=Path('dist/index.html')
           s=home.read_text()
           s=re.sub(r'<section class="section-shell" id="collection-showcase".*?</section>\s*', '', s, count=1, flags=re.S)
           home.write_text(s)
 
-          # Restore the vertical Men / Women / Unisex banners inside Perfumes/Shop.
           shop=Path('dist/shop/index.html')
           s=shop.read_text()
-          # Remove an older copy first so this remains idempotent.
           s=re.sub(r'<section class="perfume-collection-banners".*?</section>\s*', '', s, count=1, flags=re.S)
           marker='<section class="shop-section section-shell" id="collection">'
-          block='''<section class="perfume-collection-banners" aria-label="Perfume collections"><a class="perfume-collection-banner" href="/shop/?collection=men#collection" aria-label="Shop Men perfumes"><img src="/assets/collections/men-hd.webp" alt="Men perfume collection" loading="eager"></a><a class="perfume-collection-banner" href="/shop/?collection=women#collection" aria-label="Shop Women perfumes"><img src="/assets/collections/women-hd.webp" alt="Women perfume collection" loading="eager"></a><a class="perfume-collection-banner" href="/shop/?collection=unisex#collection" aria-label="Shop Unisex perfumes"><img src="/assets/collections/unisex-hd.webp" alt="Unisex perfume collection" loading="eager"></a></section>\n'''
+          block='''<section class="perfume-collection-banners" aria-label="Perfume collections"><a class="perfume-collection-banner" href="/shop/?collection=men#collection" aria-label="Shop Men perfumes"><img src="/assets/collections-square/men-collection-vertical.webp" alt="Men perfume collection" loading="eager"></a><a class="perfume-collection-banner" href="/shop/?collection=women#collection" aria-label="Shop Women perfumes"><img src="/assets/collections-square/women-collection-vertical.webp" alt="Women perfume collection" loading="eager"></a><a class="perfume-collection-banner" href="/shop/?collection=unisex#collection" aria-label="Shop Unisex perfumes"><img src="/assets/collections-square/unisex-collection-vertical.webp" alt="Unisex perfume collection" loading="eager"></a></section>\n'''
           if marker not in s:
               raise SystemExit('shop collection marker missing')
           s=s.replace(marker,block+marker,1)
+          # Put the responsive rules directly on this page so stale global CSS cannot override them.
+          responsive='''<style id="perfume-collection-responsive-fix">\n.perfume-collection-banners{box-sizing:border-box;width:100%;max-width:1420px;margin:0 auto;padding:48px 5% 22px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;overflow:hidden}.perfume-collection-banner{display:block;position:relative;width:100%;min-width:0;overflow:hidden;background:#eee8de;aspect-ratio:3/4}.perfume-collection-banner img{display:block;width:100%;height:100%;max-width:100%;object-fit:cover;object-position:center;transition:transform .6s ease}.perfume-collection-banner:hover img{transform:scale(1.02)}\n@media(max-width:850px){.perfume-collection-banners{display:flex;width:100%;max-width:none;gap:12px;padding:24px 16px 16px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scrollbar-width:none}.perfume-collection-banners::-webkit-scrollbar{display:none}.perfume-collection-banner{flex:0 0 min(82vw,390px);width:min(82vw,390px);aspect-ratio:3/4;scroll-snap-align:start}.perfume-collection-banner img{width:100%;height:100%;object-fit:cover;object-position:center}}\n@media(max-width:480px){.perfume-collection-banners{padding-left:14px;padding-right:14px;gap:10px}.perfume-collection-banner{flex-basis:84vw;width:84vw}}\n</style>'''
+          if '</head>' in s:
+              s=s.replace('</head>',responsive+'</head>',1)
           shop.write_text(s)
-
-          css=Path('dist/style.css')
-          c=css.read_text()
-          if '/* perfume-vertical-collection-banners */' not in c:
-              c += '''\n/* perfume-vertical-collection-banners */\n.perfume-collection-banners{max-width:1420px;margin:0 auto;padding:48px 5% 18px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}.perfume-collection-banner{display:block;position:relative;overflow:hidden;background:#eee8de;aspect-ratio:3/4}.perfume-collection-banner img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s var(--ease)}.perfume-collection-banner:hover img{transform:scale(1.025)}@media(max-width:700px){.perfume-collection-banners{display:flex;overflow-x:auto;gap:12px;padding:28px 5% 12px;scroll-snap-type:x mandatory}.perfume-collection-banner{flex:0 0 78%;scroll-snap-align:start}}\n'''
-              css.write_text(c)
           PY
-      - name: Commit corrected banner placement
+      - name: Commit corrected responsive banners
         run: |
           if git diff --quiet; then exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dist/index.html dist/shop/index.html dist/style.css
-          git commit -m "fix: restore vertical perfume collection banners in shop only"
+          git add dist/index.html dist/shop/index.html
+          git commit -m "fix: responsive perfume collection banners"
           git push
