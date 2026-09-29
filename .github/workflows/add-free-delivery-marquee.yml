@@ -11,18 +11,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Style announcement banner and keep English before Arabic
+      - name: Style announcement banner green with white text
         shell: bash
         run: |
           python3 - <<'PY'
           from pathlib import Path
           p=Path('dist/currency.js')
           s=p.read_text()
-          old=".announcement-marquee{overflow:hidden!important;padding:0!important;display:block!important;white-space:nowrap}"
-          new=".announcement-marquee{overflow:hidden!important;padding:0!important;display:block!important;white-space:nowrap;background:#5b3028!important;color:#fff!important}"
-          if old in s:
-              s=s.replace(old,new,1)
-          s=s.replace("color:#f4eee3!important","color:#fff!important")
+          # Support both the current brown version and any older unstyled version.
+          s=s.replace('.announcement-marquee{overflow:hidden!important;padding:0!important;display:block!important;white-space:nowrap;background:#5b3028!important;color:#fff!important}', '.announcement-marquee{overflow:hidden!important;padding:0!important;display:block!important;white-space:nowrap;background:#0b5d36!important;color:#fff!important}')
+          s=s.replace('.announcement-marquee{overflow:hidden!important;padding:0!important;display:block!important;white-space:nowrap}', '.announcement-marquee{overflow:hidden!important;padding:0!important;display:block!important;white-space:nowrap;background:#0b5d36!important;color:#fff!important}')
+          s=s.replace('color:#f4eee3!important','color:#fff!important')
           p.write_text(s)
           PY
       - name: Commit changes
@@ -32,5 +31,5 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add dist/currency.js
-          git commit -m 'style: distinct announcement background with white text'
+          git commit -m 'style: green announcement banner with white text'
           git push
