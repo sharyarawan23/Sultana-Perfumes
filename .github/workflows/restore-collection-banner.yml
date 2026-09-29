@@ -1,0 +1,35 @@
+name: Restore homepage collection banner
+on:
+  push:
+    paths:
+      - '.github/workflows/restore-collection-banner.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore collection banner
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('dist/index.html')
+          s=p.read_text()
+          marker='<section class="section-shell featured-section" id="best-sellers">'
+          if 'id="collection-showcase"' not in s:
+              block='''<section class="section-shell" id="collection-showcase" aria-labelledby="collection-showcase-title"><div class="section-heading"><div><p class="eyebrow">COLLECTIONS</p><h2 id="collection-showcase-title">Find your collection.</h2></div></div><div class="category-section"><a class="category-card" href="/shop/?collection=men#collection" aria-label="Shop Men collection"><img src="/assets/collections/men-hd.webp" alt="Men fragrance collection" loading="lazy"><div><p class="eyebrow">SULTANA PERFUMES</p><h3>Men</h3><span>Shop collection <b>→</b></span></div></a><a class="category-card" href="/shop/?collection=women#collection" aria-label="Shop Women collection"><img src="/assets/collections/women-hd.webp" alt="Women fragrance collection" loading="lazy"><div><p class="eyebrow">SULTANA PERFUMES</p><h3>Women</h3><span>Shop collection <b>→</b></span></div></a><a class="category-card" href="/shop/?collection=unisex#collection" aria-label="Shop Unisex collection"><img src="/assets/collections/unisex-hd.webp" alt="Unisex fragrance collection" loading="lazy"><div><p class="eyebrow">SULTANA PERFUMES</p><h3>Unisex</h3><span>Shop collection <b>→</b></span></div></a></div></section>\n'''
+              if marker not in s:
+                  raise SystemExit('best sellers marker missing')
+              s=s.replace(marker,block+marker,1)
+              p.write_text(s)
+          PY
+      - name: Commit restored banner
+        run: |
+          if git diff --quiet; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dist/index.html
+          git commit -m "fix: restore homepage perfume collection banner"
+          git push
