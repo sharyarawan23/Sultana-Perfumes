@@ -1,63 +1,7 @@
-(() => {
-  const setup = () => {
-    const grid = document.querySelector('#signature-products.signature-grid');
-    const section = document.querySelector('#signature-section');
-    if (!grid || !section) return false;
-    const cards = [...grid.querySelectorAll('.product-card')];
-    if (cards.length < 2) return false;
-
-    grid.style.setProperty('display','flex','important');
-    grid.style.setProperty('grid-template-columns','none','important');
-    grid.style.setProperty('flex-wrap','nowrap','important');
-    grid.style.setProperty('gap','18px','important');
-    grid.style.setProperty('overflow-x','auto','important');
-    grid.style.setProperty('overflow-y','hidden','important');
-    grid.style.setProperty('scroll-behavior','smooth','important');
-    grid.style.setProperty('scroll-snap-type','x mandatory','important');
-    grid.style.setProperty('padding-right','0','important');
-    grid.style.setProperty('padding-bottom','8px','important');
-    grid.style.setProperty('scrollbar-width','none');
-    grid.style.setProperty('-webkit-overflow-scrolling','touch');
-
-    const applySizes = () => {
-      const mobile = window.innerWidth <= 850;
-      cards.forEach(card => {
-        card.style.setProperty('flex', mobile ? '0 0 78%' : '0 0 calc((100% - 54px) / 4.18)', 'important');
-        card.style.setProperty('min-width','0','important');
-        card.style.setProperty('scroll-snap-align','start');
-      });
-    };
-    applySizes();
-    window.addEventListener('resize', applySizes, {passive:true});
-
-    const heading = section.querySelector('.section-heading');
-    if (!heading) return true;
-    let controls = heading.querySelector('.private-slider-controls');
-    if (!controls) {
-      controls = document.createElement('div');
-      controls.className = 'private-slider-controls';
-      controls.innerHTML = '<button type="button" class="private-prev" aria-label="Previous products">←</button><button type="button" class="private-next" aria-label="Next products">→</button>';
-      heading.appendChild(controls);
-    }
-    Object.assign(controls.style,{display:'flex',gap:'10px',marginLeft:'auto',alignItems:'center'});
-    controls.querySelectorAll('button').forEach(btn => Object.assign(btn.style,{width:'38px',height:'38px',border:'1px solid #d9c4a8',borderRadius:'50%',background:'#fffdfa',cursor:'pointer',fontSize:'18px',lineHeight:'1',position:'relative',zIndex:'20'}));
-
-    const step = () => {
-      const first = grid.querySelector('.product-card');
-      return first ? first.getBoundingClientRect().width + 18 : grid.clientWidth * .25;
-    };
-    controls.querySelector('.private-prev').onclick = e => {e.preventDefault();e.stopPropagation();grid.scrollBy({left:-step(),behavior:'smooth'});};
-    controls.querySelector('.private-next').onclick = e => {e.preventDefault();e.stopPropagation();grid.scrollBy({left:step(),behavior:'smooth'});};
-    return true;
-  };
-
-  const start = () => {
-    if (setup()) return;
-    let tries = 0;
-    const timer = setInterval(() => {
-      tries++;
-      if (setup() || tries > 50) clearInterval(timer);
-    },100);
-  };
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded',start); else start();
+(()=>{
+const style=document.createElement('style');style.textContent=`#signature-section .section-heading{display:flex!important;align-items:flex-end!important;justify-content:space-between!important}#signature-products.signature-grid{display:flex!important;grid-template-columns:none!important;flex-wrap:nowrap!important;gap:18px!important;overflow-x:auto!important;overflow-y:hidden!important;scroll-behavior:smooth!important;scroll-snap-type:x mandatory!important;padding:0 0 8px!important;scrollbar-width:none!important;-webkit-overflow-scrolling:touch!important}#signature-products.signature-grid::-webkit-scrollbar{display:none!important}#signature-products.signature-grid>.product-card{flex:0 0 calc((100% - 54px)/4.18)!important;min-width:0!important;scroll-snap-align:start!important}.private-slider-controls{display:flex!important;gap:10px!important;margin-left:auto!important;align-items:center!important;flex:none!important}.private-slider-controls button{display:inline-flex!important;align-items:center!important;justify-content:center!important;width:38px!important;height:38px!important;border:1px solid #d9c4a8!important;border-radius:50%!important;background:#fffdfa!important;color:#17130f!important;cursor:pointer!important;font-size:18px!important;line-height:1!important;position:relative!important;z-index:999!important;pointer-events:auto!important}@media(max-width:850px){#signature-products.signature-grid>.product-card{flex-basis:78%!important}}`;document.head.appendChild(style);
+let busy=false;
+function ensure(){if(busy)return;busy=true;try{const section=document.getElementById('signature-section'),grid=document.getElementById('signature-products');if(!section||!grid||grid.children.length<2)return;const heading=section.querySelector('.section-heading');if(!heading)return;let controls=heading.querySelector('.private-slider-controls');if(!controls){controls=document.createElement('div');controls.className='private-slider-controls';controls.innerHTML='<button type="button" class="private-prev" aria-label="Previous products">←</button><button type="button" class="private-next" aria-label="Next products">→</button>';heading.appendChild(controls)}const step=()=>{const c=grid.querySelector('.product-card');return c?c.getBoundingClientRect().width+18:Math.max(240,grid.clientWidth*.24)};const prev=controls.querySelector('.private-prev'),next=controls.querySelector('.private-next');prev.onclick=e=>{e.preventDefault();e.stopPropagation();grid.scrollBy({left:-step(),behavior:'smooth'})};next.onclick=e=>{e.preventDefault();e.stopPropagation();grid.scrollBy({left:step(),behavior:'smooth'})};}finally{busy=false}}
+function start(){ensure();setTimeout(ensure,50);setTimeout(ensure,250);setTimeout(ensure,800);setTimeout(ensure,1800);const section=document.getElementById('signature-section');if(section)new MutationObserver(()=>requestAnimationFrame(ensure)).observe(section,{childList:true,subtree:true});}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);else start();window.addEventListener('load',ensure);
 })();
