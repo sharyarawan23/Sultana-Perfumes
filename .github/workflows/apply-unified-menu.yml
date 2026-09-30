@@ -1,0 +1,36 @@
+name: Apply unified menu
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-unified-menu.yml'
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add unified menu to all HTML pages
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          changed=0
+          for p in Path('dist').rglob('*.html'):
+              s=p.read_text(encoding='utf-8')
+              if '/menu-unified.js' in s:
+                  continue
+              tag='<script src="/menu-unified.js?v=20261001-2" defer></script>'
+              if '</body>' in s:
+                  s=s.replace('</body>',tag+'</body>')
+                  p.write_text(s,encoding='utf-8')
+                  changed+=1
+          print('updated',changed,'HTML files')
+          PY
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dist
+          git diff --cached --quiet || git commit -m "Load unified navigation on all pages"
+          git push
