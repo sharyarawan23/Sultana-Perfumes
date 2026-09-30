@@ -1,0 +1,46 @@
+name: Fix Private Collection Prices
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/fix-private-prices.yml']
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Apply confirmed prices and rebuild product output
+        run: |
+          python - <<'PY'
+          import json, csv, pathlib, re
+          prices={'sultana-oud':350,'royal-bukhoor':350,'amber-night':350,'oud-collection-set':1100}
+          p=pathlib.Path('data/products.json')
+          data=json.loads(p.read_text())
+          for x in data:
+              if x.get('id') in prices: x['price']=prices[x['id']]
+          p.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+          c=pathlib.Path('data/products.csv')
+          rows=list(csv.DictReader(c.open(newline='',encoding='utf-8')))
+          for r in rows:
+              if r.get('id') in prices: r['price']=str(prices[r['id']])
+          with c.open('w',newline='',encoding='utf-8') as f:
+              w=csv.DictWriter(f,fieldnames=rows[0].keys()); w.writeheader(); w.writerows(rows)
+          a=pathlib.Path('dist/app.js')
+          s=a.read_text()
+          for pid,price in prices.items():
+              pat=r'("id"\s*:\s*"'+re.escape(pid)+r'".*?"price"\s*:\s*)null'
+              s,n=re.subn(pat,lambda m:m.group(1)+str(price),s,count=1,flags=re.S)
+              if n!=1: raise SystemExit(f'Could not patch {pid} in dist/app.js')
+          a.write_text(s)
+          PY
+          python scripts/generate-product-pages.py
+          rm .github/workflows/fix-private-prices.yml
+          git config user.name 'Sultana Site Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git commit -m 'Show confirmed Private Collection prices on home'
+          git push
