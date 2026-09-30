@@ -309,7 +309,7 @@
   {
     "id": "sultana-oud",
     "name": "Sultana Oud",
-    "price": null,
+    "price": 350,
     "currency": "QAR",
     "type": "Signature Bakhoor",
     "size": "",
@@ -327,7 +327,7 @@
   {
     "id": "royal-bukhoor",
     "name": "Royal Bukhoor",
-    "price": null,
+    "price": 350,
     "currency": "QAR",
     "type": "Signature Bakhoor",
     "size": "",
@@ -345,7 +345,7 @@
   {
     "id": "amber-night",
     "name": "Amber Night",
-    "price": null,
+    "price": 350,
     "currency": "QAR",
     "type": "Signature Bakhoor",
     "size": "",
@@ -363,7 +363,7 @@
   {
     "id": "oud-collection-set",
     "name": "Oud Collection Set",
-    "price": null,
+    "price": 1100,
     "currency": "QAR",
     "type": "Gift Set",
     "size": "",
